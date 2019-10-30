@@ -1,2 +1,0 @@
-# Epistemophilia
-Personal Blog Pages
