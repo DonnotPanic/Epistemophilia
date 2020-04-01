@@ -1,6 +1,6 @@
 +++
-date = "2020-4-1"
-Title = "CPS-tutorial-for-kindergarteners"
+date = "2020-04-01"
+title = "CPS-tutorial-for-kindergarteners"
 katex = "true"
 series = ["Can_Food"]
 +++
@@ -9,7 +9,7 @@ series = ["Can_Food"]
 >
 > ——*Julius·Caesar·Zeppeli*
 
-#Continuation
+# Continuation
 
 Edgar Dijkstra once serverely critisized the excessive use of `goto` statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without `goto`? Well, your software teacher might have told you that, by  **structured program theorem**, the `goto` statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of `sequence` , ` selection/choice`, and `repetition/iteration` despite the fact that code duplication and additional variables may need to be introduced.
 
@@ -261,7 +261,7 @@ expr4 = run $ do
 
 After a skim of the implementation of Cont Monad as the utility to describe the behaviour of other monads, we could now talk about what is **delimited continuation** and the relationship between delimited continuation and Cont Monad.
 
-#Delimited Continuation
+# Delimited Continuation
 
 > [Delimited continuations](http://okmij.org/ftp/continuations/#tutorial) are continuations whose extent is delimited. In the expression 3+[5∗2]−1, we implicitly assumed that the rest of the current expression spans whole the expression, that is, 3+[·]−1. Rather than taking whole the rest of the computation, however, we sometimes want to capture only a part of it. Such continuations are called delimited continuations.
 > The extent to which the current delimited continuation spans is designated by an explicit delimiter ⟨· · ·⟩. For example, in the expression ⟨3 + [5 ∗ 2]⟩ − 1, the current delimited continuation at [5 ∗ 2] is only ⟨3 + [ · ]⟩ and does not contain − 1.

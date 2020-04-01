@@ -1,5 +1,5 @@
 +++
-date = "2018-9-23"
+date = "2018-09-23"
 title ="五分钟学会快速数论变换"
 katex = "true"
 series = ["Fried_Fish"]
