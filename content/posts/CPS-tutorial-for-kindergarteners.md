@@ -9,6 +9,7 @@ series = ["Can_Food"]
 >
 > ——*Julius·Caesar·Zeppeli*
 
+
 # Continuation
 
 Edgar Dijkstra once serverely critisized the excessive use of `goto` statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without `goto`? Well, your software teacher might have told you that, by  **structured program theorem**, the `goto` statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of `sequence` , ` selection/choice`, and `repetition/iteration` despite the fact that code duplication and additional variables may need to be introduced.
@@ -35,7 +36,8 @@ While evaluating `Add x y` you actually are evaluating`(eval x) && (eval y)`,whi
 
 My trick to understand this is to view a continuation as a function with a hole that awaits the result from its frontier. In this case, you can image that continuation is `(\u -> u && (eval y))` where `u = eval x` is the hole.
 
-#Continuation-Passing Style
+
+# Continuation-Passing Style
 
 Some may still be confused by why continuation is needed, that will not be a problem after you fully grab the core of CPS, AKA Continuation-Passing Style. Let's back to the example above. So here is the `Add x y` , you will `eval x` first and leave alone `&& (eval y)` . What we are going to do is to explicitly show how the control flows within the calculation. We added a function as a parameter of our new `eval'` which simply means the next operation we are going to do on the result of `eval`. 
 
