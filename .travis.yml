@@ -3,6 +3,7 @@ language: go
 git:
     depth: 1
 install: 
+         - curl https://gitee.com/skiy/golang-install/raw/master/install.sh | bash
          - mkdir $HOME/src
          - cd $HOME/src
          - git clone https://github.com/gohugoio/hugo.git
