@@ -1,14 +1,17 @@
 sudo: false
-language: go
-git:
-    depth: 1
-install: 
-         - curl https://gitee.com/skiy/golang-install/raw/master/install.sh | bash
-         - mkdir $HOME/src
-         - cd $HOME/src
-         - git clone https://github.com/gohugoio/hugo.git
-         - cd hugo
-         - go install
+dist: xenial
+language: python
+python: 3.7
+# 使用python下载已发布的hugo安装更快
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get -yq install apt-transport-https
+install:
+  # install latest hugo release version
+  - wget -qO- https://api.github.com/repos/gohugoio/hugo/releases/latest | sed -r -n '/browser_download_url/{/Linux-64bit.deb/{s@[^:]*:[[:space:]]*"([^"]*)".*@\1@g;p;q}}' | xargs wget
+  - sudo dpkg -i hugo*.deb
+  - rm -rf public 2> /dev/null
 script: hugo
 
 deploy:
