@@ -1,17 +1,15 @@
 +++
-
 date = "2020-4-1"
 Title = "CPS-tutorial-for-kindergarteners"
 katex = "true"
 series = ["Can_Food"]
-
 +++
 
 > "It was a detour that was our shortest path"  
 >
 > ——*Julius·Caesar·Zeppeli*
 
-##Continuation
+#Continuation
 
 Edgar Dijkstra once serverely critisized the excessive use of `goto` statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without `goto`? Well, your software teacher might have told you that, by  **structured program theorem**, the `goto` statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of `sequence` , ` selection/choice`, and `repetition/iteration` despite the fact that code duplication and additional variables may need to be introduced.
 
@@ -37,7 +35,7 @@ While evaluating `Add x y` you actually are evaluating`(eval x) && (eval y)`,whi
 
 My trick to understand this is to view a continuation as a function with a hole that awaits the result from its frontier. In this case, you can image that continuation is `(\u -> u && (eval y))` where `u = eval x` is the hole.
 
-##Continuation-Passing Style
+#Continuation-Passing Style
 
 Some may still be confused by why continuation is needed, that will not be a problem after you fully grab the core of CPS, AKA Continuation-Passing Style. Let's back to the example above. So here is the `Add x y` , you will `eval x` first and leave alone `&& (eval y)` . What we are going to do is to explicitly show how the control flows within the calculation. We added a function as a parameter of our new `eval'` which simply means the next operation we are going to do on the result of `eval`. 
 
@@ -140,7 +138,7 @@ As you can see, when there is a `Throw` appears in the expression, the `eval''` 
 
 Sometimes, we'd like to combine `Catch` and`Throw` together, and here we do have such a function called `callCC` , AKA call-with-Current-Continuation. For those who have learned some lisp that will not be unfamiliar. In Haskell, `callCC` is a little bit different from that in a dynamic typed language like scheme, but you can still think that `callCC` means applying the current continuation to the value and return the result directly, neglecting all the operation behind. And in most of times `callCC` has nothing different from the `return` except that it will ask you to write down the continuation explicitly.
 
-## Mother of all Monads
+# Mother of all Monads
 
 Now, let's just step back to the original defination of the continuation since we want to generalize the conclusion.
 
@@ -263,7 +261,7 @@ expr4 = run $ do
 
 After a skim of the implementation of Cont Monad as the utility to describe the behaviour of other monads, we could now talk about what is **delimited continuation** and the relationship between delimited continuation and Cont Monad.
 
-##Delimited Continuation
+#Delimited Continuation
 
 > [Delimited continuations](http://okmij.org/ftp/continuations/#tutorial) are continuations whose extent is delimited. In the expression 3+[5∗2]−1, we implicitly assumed that the rest of the current expression spans whole the expression, that is, 3+[·]−1. Rather than taking whole the rest of the computation, however, we sometimes want to capture only a part of it. Such continuations are called delimited continuations.
 > The extent to which the current delimited continuation spans is designated by an explicit delimiter ⟨· · ·⟩. For example, in the expression ⟨3 + [5 ∗ 2]⟩ − 1, the current delimited continuation at [5 ∗ 2] is only ⟨3 + [ · ]⟩ and does not contain − 1.
