@@ -7,7 +7,7 @@ I am currently a sophomore student majoring in computer science.
 
 This blog is a record of my study in SHU. 
 
-If you find any problem in my blogs, feel free to contact with me.
+If you find any problem in my blogs, feel free to contact me.
 
 ## the Meaning of Epistemophilia
 

@@ -490,11 +490,10 @@ void prep(char *A, char *B, LL *a, LL *b, int &len) {
 }
 
 void rader(LL *a, int len) {
+    //rader算法提供了码位倒序的进行交换的方法
     int j = len >> 1;
     for (int i = 1; i < len - 1; i++) {
-        //按下标翻转
         if (i < j) swap(a[i], a[j]);
-        //不断二分
         int k = len >> 1;
         while (j >= k) {
             j -= k;
