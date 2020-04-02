@@ -1,4 +1,4 @@
-baseurl = "https://DonnotPanic.github.io/Epistemophilia"
+baseurl = "https://chronicat.xyz"
 title = "Epistemophilia"
 
 theme = "hugo-coder"
@@ -13,7 +13,7 @@ pygmentsstyle = "b2"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 
-#disqusShortname = "C'Cat"
+disqusShortname = "chronicat-xyz"
 
 [params]
     author = "ChroniCat"
@@ -30,7 +30,8 @@ pygmentscodefencesguesssyntax = true
 
     # Git Commit in Footer, uncomment the line below to enable it.
     # commit = "https://github.com/luizdepra/hugo-coder/tree/"
-
+    
+    math = true
     rtl = false
 
     # Use inverted colors
