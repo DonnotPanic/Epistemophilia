@@ -9,7 +9,6 @@ series = ["Can_Food"]
 >
 > ——*Julius·Caesar·Zeppeli*
 
-
 # Continuation
 
 Edgar Dijkstra once serverely critisized the excessive use of `goto` statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without `goto`? Well, your software teacher might have told you that, by  **structured program theorem**, the `goto` statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of `sequence` , ` selection/choice`, and `repetition/iteration` despite the fact that code duplication and additional variables may need to be introduced.
@@ -35,7 +34,6 @@ There is nothing to say about `Not` and since `And` and `Or` are the same, just 
 While evaluating `Add x y` you actually are evaluating`(eval x) && (eval y)`,which means you first do `eval x ` then do `&& (eval y)`. And  `&& (eval y)` is the so-called continuation, which, literally speaking, is the computation you are going to do next (after `eval x`).
 
 My trick to understand this is to view a continuation as a function with a hole that awaits the result from its frontier. In this case, you can image that continuation is `(\u -> u && (eval y))` where `u = eval x` is the hole.
-
 
 # Continuation-Passing Style
 
@@ -94,7 +92,7 @@ run e = eval'' e STOP
 
 And after all, we've got the abstract represent of a machine that calculate any boolean expression composed by <`and` , `or` , `not`> and you are 100% sure this program will halt. You may find, well, in consequence, the Cont stores the function that's going to be calculate next and since it's a LIFO structure it works just like a control stack——while we do eval we actually push functions into the control stack and exec is the opposite —— we pop the control stack and apply what we've poped to the current result. You can see, it's the **Pushdown Automata**.
 
-If you've never heard of Pushdown Automata, don't worry. Since this tutorial is written for the kindergarteners, if you can't find the relationship between this whole banch of things and `goto` statement, I am going to show you how's the thing goes.
+If you've never heard of Pushdown Automata, don't worry. Since this tutorial is written for the kindergarteners, if you can't find the relationship between this whole banch of things and `goto` statement, I am going to show you how the thing goes.
 
 As we dig deep into the very essence of `goto` statement, it is obvious `goto` is nothing but branch. I mean, by `goto` you actually jump to another instruction instead of the one that follows. In a CFG (Control Flow Graph), you may replace any `goto` with the arrows pointing to another BB (Basic Block) instead of the one right beneath. Well, we could make it by escape continuation mechanism. Again, I will use the evalutaion of boolean expression as my example. Let's add an error handler Throw / Catch.
 
@@ -309,7 +307,7 @@ reset (return m) = return m
 reset (shift f >>= k) = reset (f (evalCont . k))
 ```
 
-The best way to illustrate is by giving examples:
+The best way to illustrate is to give some examples:
 
 ```haskell
 -- liftM2 :: Monad m => (a1 -> a2 -> r) -> m a1 -> m a2 -> m r
