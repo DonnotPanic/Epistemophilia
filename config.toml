@@ -56,8 +56,6 @@ disqusShortname = "chronicat-xyz"
     icon = "fa fa-github"
     weight = 1
     url = "https://github.com/DonnotPanic/"
-[[params.socail]]
-    name = 
 
 [languages]
     [languages.en]
