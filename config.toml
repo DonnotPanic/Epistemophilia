@@ -53,10 +53,11 @@ disqusShortname = "chronicat-xyz"
 
 [[params.social]]
     name = "GitHub"
-    icon = "fab fa-github"
+    icon = "fa fa-github"
     weight = 1
     url = "https://github.com/DonnotPanic/"
-
+[[params.socail]]
+    name = 
 
 [languages]
     [languages.en]
