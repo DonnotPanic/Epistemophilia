@@ -1,5 +1,5 @@
 +++
-data = "2020-05-04"
+date = "2020-05-04"
 title = "Typed Tagless Final Interpreters"
 katex = true
 series = ["Can_Food"]
