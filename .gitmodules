@@ -1,3 +1,12 @@
 [submodule "themes/hugo-coder"]
 	path = themes/hugo-coder
 	url = https://github.com/luizdepra/hugo-coder.git
+[submodule "themes/ramium"]
+	path = themes/ramium
+	url = https://github.com/rafed/ramium.git
+[submodule "themes/ghazal"]
+	path = themes/ghazal
+	url = https://github.com/darshanbaral/ghazal.git
+[submodule "themes/diary"]
+	path = themes/diary
+	url = https://github.com/AmazingRise/hugo-theme-diary.git
