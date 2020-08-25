@@ -31,29 +31,29 @@ s = ap
 -- s = (<*>)
 ```
 
-> 实际上这里（Applicative m) => m 可以看作 a -> *，这样
+> 实际上这里（Applicative m) => m 可以看作 a -> \*，这样
 > s :: (a -> b -> c) -> (a -> b) -> a -> c
 > 等价于(<\*>) :: m (b -> c) -> m b -> m c
 
 仅仅这三个组合子就足以表示各种可计算函数了[^1]
 
 其实只需要 **SK** 就完全足够了，下面将证明 **I** 可以由 **SK组合子** 表示
+
 $$
-\begin{align}
-&\  \text I \\
-\Rightarrow\ & \lambda x. x\\
-\Rightarrow\ & \lambda x. \text K\ x\ \_\\
-\Rightarrow\ & \lambda x. \text K\ x\ (\text {K _ }x)\\
-\Rightarrow\ & \lambda x. \text {S K}\ (\text {K _) }x\\
-\Rightarrow\ &  \text {S K}\ (\text {K _) }\\
-\end{align}
+\begin{align\*}
+&\  \text {I} \\\\\\
+\Rightarrow\ & \lambda x. x\\\\\\
+\Rightarrow\ & \lambda x. \text {K $x$ \_ } \\\\\\
+\Rightarrow\ & \lambda x. \text {K}\ x\ (\text {K \_ }x)\\\\\\
+\Rightarrow\ & \lambda x. \text {S K}\ (\text {K \_ })x\\\\\\
+\Rightarrow\ &  \text {S K}\ (\text {K \_ ) }\\\\\\
+\end{align\*}
 $$
 
 [^1]:详见 **Church's Thesis**
-
 ## Point-free Style
 
-实际上在之前用 **SK组合子** 表示 **I** 的最后一步用到了 **eta reduction**。简单的说 **eta reduction** 就是 $\lambda x.f\ x =_\eta f$ 其中 $f$ 必须不含约束变元 $x$ 。
+实际上在之前用 **SK组合子** 表示 **I** 的最后一步用到了 **eta reduction**。简单的说 **eta reduction** 就是 $\lambda x.f\ x =\_\eta f$ 其中 $f$ 必须不含约束变元 $x$ 。
 
 **Point-free Style** 就是采用高阶函数和 **eta reduction** 约去函数中所有的约束变元。
 
@@ -61,66 +61,69 @@ $$
 
 **Case1:**
 $$
-\begin{align}
-&\  \text {flip (\$) :: {a $\to$ (a $\to$ b) $\to$ b}} \\
-\Rightarrow\ & \lambda x.\lambda f.f\ x\\
-\Rightarrow\ & \lambda x.\lambda f.\text {I }f\ (\text {K }x\ f)\\
-\Rightarrow\ & \lambda x.\lambda f.\text {S I }(\text {K }x)\ f\\
-=_\eta\ & \lambda x.\text {S I }(\text {K }x)\\
-\Rightarrow\ & \lambda x.(\text {K (S I)) }x\ (\text {K }x)\\
-\Rightarrow\ & \lambda x.\text {S (K (S I)) }\text {K }x\\
-=_\eta\ & \text {S (K (S I)) }\text {K }\\
-\end{align}
+\begin{align\*}
+&\  \text {flip (\\$) :: {a $\to$ (a $\to$ b) $\to$ b}} \\\\\\
+\Rightarrow\ & \lambda x.\lambda f.f\ x\\\\\\
+\Rightarrow\ & \lambda x.\lambda f.\text {I $f$ (K $x$ $f$)}\\\\\\
+\Rightarrow\ & \lambda x.\lambda f.\text {S I (K $x$) $f$}\\\\\\
+=\_\eta\ & \lambda x.\text {S I (K $x$)}\\\\\\
+\Rightarrow\ & \lambda x.(\text {K (S I)) $x$ (K $x$)}\\\\\\
+\Rightarrow\ & \lambda x.\text {S (K (S I)) K $x$}\\\\\\
+=\_\eta\ & \text {S (K (S I)) K}\\\\\\
+\end{align\*}
 $$
+
 **Case2:**
 $$
-\begin{align}
-&\  \text {(.)/compose :: {(b $\to$ c) $\to$ (a $\to$ b) $\to$ a $\to$ c}}\\
-\Rightarrow\ & \lambda g.\lambda f.\lambda x.g\ (f\ x)\\
-\Rightarrow\ & \lambda g.\lambda f.\lambda x.(\text {K }g)\ x\ (f\ x)\\
-\Rightarrow\ & \lambda g.\lambda f.\lambda x.\text {S (K }g)\ f\ x\\
-=_\eta\ & \lambda g.\lambda f.\text {S (K }g)\ f\\
-=_\eta\ & \lambda g.\text {S (K }g)\\
-\Rightarrow\ & \lambda g.\text {(K S) $g$ (K }g)\\
-\Rightarrow\ & \lambda g.\text {S (K S) K }g\\
-=_\eta\ & \text {S (K S) K }\\
-\end{align}
+\begin{align\*}
+&\  \text {compose :: {(b $\to$ c) $\to$ (a $\to$ b) $\to$ a $\to$ c}}\\\\\\
+\Rightarrow\ & \lambda g.\lambda f.\lambda x.g\ (f\ x)\\\\\\
+\Rightarrow\ & \lambda g.\lambda f.\lambda x.(\text {K } g)\ x\ (f\ x)\\\\\\
+\Rightarrow\ & \lambda g.\lambda f.\lambda x.\text {S (K }g)\ f\ x\\\\\\
+=\_\eta\ & \lambda g.\lambda f.\text {S (K $g$) $f$} \\\\\\
+=\_\eta\ & \lambda g.\text {S (K $g$)}\\\\\\
+\Rightarrow\ & \lambda g.\text {(K S) $g$ (K $g$)}\\\\\\
+\Rightarrow\ & \lambda g.\text {S (K S) K $g$}\\\\\\
+=\_\eta\ & \text {S (K S) K}\\\\\\
+\end{align\*}
 $$
+
 **Case3:**
 $$
-\begin{align}
-&\  \text {flip :: {(a $\to$ b $\to$ c) $\to$ b $\to$ a $\to$ c}}\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ b\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ ((\text {K }b)\ a)\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.\text {S $f$ (K }b)\ a\\
-=_\eta\ & \lambda f.\lambda b.\text {S $f$ (K }b)\\
-\Rightarrow\ & \lambda f.\lambda b.\text {(K (S $f$) b) (K }b)\\
-\Rightarrow\ & \lambda f.\lambda b.\text {(K (S $f$)) b (K }b)\\
-\Rightarrow\ & \lambda f.\lambda b.\text {S (K (S $f$)) K }b\\
-=_\eta\ & \lambda f.\text {S (K (S $f$)) K }\\
-\Rightarrow\ & \lambda f.\text {S ((K K f) (S $f$)) K }\\
-\Rightarrow\ & \lambda f.\text {S ((K K) f (S $f$)) K }\\
-\Rightarrow\ & \lambda f.\text {S (S (K K) S $f$) K }\\
-\Rightarrow\ & \lambda f.\text {(K S f) (S (K K) S $f$) K }\\
-\Rightarrow\ & \lambda f.\text {(K S) f (S (K K) S $f$) K }\\
-\Rightarrow\ & \lambda f.\text {(S (K S) (S (K K) S) $f$) K }\\
-\Rightarrow\ & \lambda f.\text {(S (K S) (S (K K) S) $f$) (K K $f$) }\\
-\Rightarrow\ & \lambda f.\text {S (S (K S) (S (K K) S)) (K K) $f$ }\\
-=_\eta\ & \text {S (S (K S) (S (K K) S)) (K K)}\\
-\end{align}
+\begin{align\*}
+&\  \text {flip :: {(a $\to$ b $\to$ c) $\to$ b $\to$ a $\to$ c}}\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ b\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ ((\text {K }b)\ a)\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.\text {S $f$ (K }b)\ a\\\\\\
+=\_\eta\ & \lambda f.\lambda b.\text {S $f$ (K }b)\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\text {(K (S $f$) b) (K }b)\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\text {(K (S $f$)) b (K }b)\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\text {S (K (S $f$)) K }b\\\\\\
+=\_\eta\ & \lambda f.\text {S (K (S $f$)) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {S ((K K f) (S $f$)) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {S ((K K) f (S $f$)) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {S (S (K K) S $f$) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {(K S f) (S (K K) S $f$) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {(K S) f (S (K K) S $f$) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {(S (K S) (S (K K) S) $f$) K }\\\\\\
+\Rightarrow\ & \lambda f.\text {(S (K S) (S (K K) S) $f$) (K K $f$) }\\\\\\
+\Rightarrow\ & \lambda f.\text {S (S (K S) (S (K K) S)) (K K) $f$ }\\\\\\
+=\_\eta\ & \text {S (S (K S) (S (K K) S)) (K K)}\\\\\\
+\end{align\*}
 $$
+
 **Case4:**
 $$
-\begin{align}
-&\  \text {join :: {(a $\to$ a $\to$ b) $\to$ a $\to$ b}}\\
-\Rightarrow\ & \lambda f.\lambda x.f\ x\ x\\
-\Rightarrow\ & \lambda f.\lambda x.f\ x\ \text {(I } x)\\
-\Rightarrow\ & \lambda f.\lambda x.\text {S $f$ I }x \\
-=_\eta\ & \lambda f.\text {S $f$ I}\\
-\Rightarrow\ & \lambda f.\text{S $f$ (K I }f) \\
-\Rightarrow\ & \lambda f.\text{S S (K I) }f \\
-=_\eta\ & \text{S S (K I) }\\
-\end{align}
+\begin{align\*}
+&\  \text {join :: {(a $\to$ a $\to$ b) $\to$ a $\to$ b}}\\\\\\
+\Rightarrow\ & \lambda f.\lambda x.f\ x\ x\\\\\\
+\Rightarrow\ & \lambda f.\lambda x.f\ x\ \text {(I } x)\\\\\\
+\Rightarrow\ & \lambda f.\lambda x.\text {S $f$ I }x \\\\\\
+=\_\eta\ & \lambda f.\text {S $f$ I}\\\\\\
+\Rightarrow\ & \lambda f.\text{S $f$ (K I }f) \\\\\\
+\Rightarrow\ & \lambda f.\text{S S (K I) }f \\\\\\
+=\_\eta\ & \text{S S (K I) }\\\\\\
+\end{align\*}
 $$
 
 
@@ -128,9 +131,9 @@ $$
 
 1. $\lambda x.x$，对应 **I**。`(1)`
 
-2. $\lambda x. \text A$，$\text A $ 中约束变元 $x$ 不出现。那么有$\lambda x. \text A \Rightarrow\lambda x. \text {K A }x =_\eta \text {K A}$。`(2)`
+2. $\lambda x. \text A$，$\text A $ 中约束变元 $x$ 不出现。那么有$\lambda x. \text A \Rightarrow\lambda x. \text {K A }x =\_\eta \text {K A}$。`(2)`
 
-3. $\lambda x. \text A$，$\text A$ 中含有约束变元$x$，如果$ \text A$只有一项，则对应 `(1)` 。如果拥有至少两项，因为左结合性，$f_1\ f_2\ f_2 \cdots\ f_n$ 一定可以表示成 $(\cdots((f_1\ f_2)\ f_3)\cdots )\ f_n $。则我们假设其可以表示为 $ \lambda x.\text {B C}$ 的形式，对其进行递归分解讨论。 `(3)`
+3. $\lambda x. \text A$，$\text A$ 中含有约束变元$x$，如果$ \text A$只有一项，则对应 `(1)` 。如果拥有至少两项，因为左结合性，$f\_1\ f\_2\ f\_2 \cdots\ f\_n$ 一定可以表示成 $(\cdots((f\_1\ f\_2)\ f\_3)\cdots )\ f\_n $。则我们假设其可以表示为 $ \lambda x.\text {B C}$ 的形式，对其进行递归分解讨论。 `(3)`
 
    1. $\text B$ 中不含约束变元 $x$，则 $\text C$ 中一定含有约束变元 $x$。
       1. $\text C = x$， 那么直接采用 **eta reduction** 即可。
@@ -138,7 +141,7 @@ $$
       3. 其余情况，对 $\text {C} $ 进行递归分解 `(5)`。
    2. $\text B $ 中含有约束变元 $x$ 。$\text B = x $，那么可以转化为 $\text I\ x$。若$\text {B = (D }x) $，其中 $\text D $ 不含约束变元 $x$ 。
       1. $\text C $ 中不含约束变元 $x$。通过 `(2)` 可以将 $\text C $ 转化为 $\text {(K C) $x$}$。跳到 `(4)`。
-      2. $\text {C = (E }x)$ ，其中 $\text E$ 不含约束变元 $x$ ，那么  $ \lambda x.\text {B C} \Rightarrow \lambda x.\text{(D $x$) (E $x$)} \Rightarrow \lambda x.\text {S D E } x =_\eta \text {S D E}$。`(4)`
+      2. $\text {C = (E }x)$ ，其中 $\text E$ 不含约束变元 $x$ ，那么  $ \lambda x.\text {B C} \Rightarrow \lambda x.\text{(D $x$) (E $x$)} \Rightarrow \lambda x.\text {S D E } x =\_\eta \text {S D E}$。`(4)`
       3.  其余情况对 $\text C$ 进行递归分解 `(5)`。
    3. 对 $\text C$ 进行递归分解 `(5)`。
 
@@ -154,81 +157,61 @@ $$
 
 **flip:**
 $$
-\begin{align}
-&\  \text {flip :: {(a $\to$ b $\to$ c) $\to$ b $\to$ a $\to$ c}}\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ b\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ ((\text {K }b)\ a)\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.\text {S $f$ (K }b)\ a\\
-=_\eta\ & \lambda f.\lambda b.\text {S $f$ (K }b)\\
-\Rightarrow\ & \lambda f.\lambda b.\text {(S $f$) (K }b)\\
-\Rightarrow\ & \lambda f.\text {(.) (S $f$) ($\lambda b$.K }b)\\
-=_\eta\ & \lambda f.\text {(.) (S $f$) K}\\
-\Rightarrow\ & \lambda f.\text {(.) (S $f$) (K K (S $f$))}\\
-\Rightarrow\ & \lambda f.\text {S (.) (K K) (S $f$)}\\
-\Rightarrow\ & \text {(.) (S (.) (K K)) $\lambda f$.(S $f$)}\\
-=_\eta\ & \text {(.) (S (.) (K K)) S}
-\end{align}
+\begin{align\*}
+&\  \text {flip :: {(a $\to$ b $\to$ c) $\to$ b $\to$ a $\to$ c}}\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ b\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ ((\text {K }b)\ a)\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.\text {S $f$ (K }b)\ a\\\\\\
+=\_\eta\ & \lambda f.\lambda b.\text {S $f$ (K }b)\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\text {(S $f$) (K }b)\\\\\\
+\Rightarrow\ & \lambda f.\text {(.) (S $f$) ($\lambda b$.K }b)\\\\\\
+=\_\eta\ & \lambda f.\text {(.) (S $f$) K}\\\\\\
+\Rightarrow\ & \lambda f.\text {(.) (S $f$) (K K (S $f$))}\\\\\\
+\Rightarrow\ & \lambda f.\text {S (.) (K K) (S $f$)}\\\\\\
+\Rightarrow\ & \text {(.) (S (.) (K K)) $\lambda f$.(S $f$)}\\\\\\
+=\_\eta\ & \text {(.) (S (.) (K K)) S}
+\end{align\*}
 $$
 **flip ($):**
 $$
-\begin{align}
-&\  \text {flip (\$) :: {a $\to$ (a $\to$ b) $\to$ b}} \\
-\Rightarrow\ & \lambda x.\lambda f.f\ x\\
-\Rightarrow\ & \lambda x.\text {flip } (\lambda f.f)\ x\\
-=_\eta\ & \lambda x.\text {flip I }x\\
-=_\eta\ & \text {flip I}
-\end{align}
+\begin{align\*}
+&\  \text {flip (\\$) :: {a $\to$ (a $\to$ b) $\to$ b}} \\\\\\
+\Rightarrow\ & \lambda x.\lambda f.f\ x\\\\\\
+\Rightarrow\ & \lambda x.\text {flip}\ (\lambda f.f)\ x\\\\\\
+=\_\eta\ & \lambda x.\text {flip I $x$}\\\\\\
+=\_\eta\ & \text {flip I}
+\end{align\*}
 $$
 **join:**
 $$
-\begin{align}
-&\  \text {join :: {(a $\to$ a $\to$ b) $\to$ a $\to$ b}}\\
-\Rightarrow\ & \lambda f.\lambda x.f\ x\ x\\
-\Rightarrow\ & \lambda f.\lambda x.f\ x\ \text {(I } x)\\
-\Rightarrow\ & \lambda f.\lambda x.\text{S $f$ I }x\\
-=_\eta\ & \lambda f.\text{S $f$ I}\\
-\Rightarrow\ &\text {flip }\lambda f.(\text S\ f)\ \text I\\
-=_\eta\ & \text {flip S I}
-\end{align}
+\begin{align\*}
+&\  \text {join :: {(a $\to$ a $\to$ b) $\to$ a $\to$ b}}\\\\\\
+\Rightarrow\ & \lambda f.\lambda x.f\ x\ x\\\\\\
+\Rightarrow\ & \lambda f.\lambda x.f\ x\ \text {(I } x)\\\\\\
+\Rightarrow\ & \lambda f.\lambda x.\text{S $f$ I }x\\\\\\
+=\_\eta\ & \lambda f.\text{S $f$ I}\\\\\\
+\Rightarrow\ &\text {flip }\lambda f.(\text S\ f)\ \text I\\\\\\
+=\_\eta\ & \text {flip S I}
+\end{align\*}
 $$
+
 有 [pointfree.io](pointfree.io) 内味了。> w <
 
-当然转换方法其实非常多，也非常自由，让我们试试用 `compose/(.)` 和 `flip ($)` 来写 `flip` ：
+当然转换方法其实非常多，也非常自由，让我们试试用 `compose` 和 `flip ($)` 来写 `flip` ：
 
-> `flip ($)` 太长了，就用 `rev` 代替了
+> `flip ($)` 太长了，就用 `rev` 代替了，同理，`compose` 用 `(.)` 代替
 
 **flip:**
 $$
-\begin{align}&\  \text {flip :: {(a $\to$ b $\to$ c) $\to$ b $\to$ a $\to$ c}}\\
-\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ b\\
-=_\eta\ & \lambda f.\text {(.) (S $f$) K}\\
-\Rightarrow\ &\lambda f.\text {rev K ((.) S $f$)}\\
-\Rightarrow\ &\text {(.) (rev K) ($\lambda f$.(.) S $f$)}\\
-=_\eta \ &\text {(.) (rev K) ((.) S)}\\
-\end{align}
+\begin{align\*}&\  \text {flip :: {(a $\to$ b $\to$ c) $\to$ b $\to$ a $\to$ c}}\\\\\\
+\Rightarrow\ & \lambda f.\lambda b.\lambda a.f\ a\ b\\\\\\
+=\_\eta\ & \lambda f.\text {(.) (S $f$) K}\\\\\\
+\Rightarrow\ &\lambda f.\text {rev K ((.) S $f$)}\\\\\\
+\Rightarrow\ &\text {(.) (rev K) ($\lambda f$.(.) S $f$)}\\\\\\
+=\_\eta \ &\text {(.) (rev K) ((.) S)}\\\\\\
+\end{align\*}
 $$
 感觉这东西就像函数式编程里的 `brainfuck` ; )
-
-
-
-
-
-\f \g f (g true false) false
-
-rotr arg2 foo arg1
-
-rotv arg1 arg2 foo
-
-\f (.) (rotr false f) (rotv true false)
-
-(.) (rotr (rotv true false) (.)) (rotr false)
-
-(b - b - b) - a - a
-
-\f \x f x false
-\f rotr false f
-\f .f not I
-Rotv 
 
 
 
