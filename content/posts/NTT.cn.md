@@ -2,12 +2,11 @@
 date = "2018-09-23"
 title ="五分钟学会快速数论变换"
 katex = "true"
-series = ["Fried_Fish"]
+series = ["combinatorics","algorithm","programming","C++"]
 +++
 
->标签：鱼干
 
->注，本文章是18年的旧文，是我刚学C++时所写，因此代码较多
+>注，本文章是18年的旧文，是我刚学C++时所写。
 
 ### 前置: 快速幂取模
 

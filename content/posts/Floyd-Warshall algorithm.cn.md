@@ -2,10 +2,9 @@
 date = "2018-10-11"
 title ="Warshall算法简述"
 katex = "true"
-series = ["Fried_Fish"]
+series = ["algorithm","C++"]
 +++
 
->标签：鱼干
 
 
 > 虽然Warshall可以在边为负值的加权图中求最短路，但是图中不能有**权重为负**的**圈**。

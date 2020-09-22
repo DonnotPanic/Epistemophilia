@@ -2,10 +2,9 @@
 date = "2020-05-04"
 title = "Typed Tagless Final Interpreters"
 katex = true
-series = ["Can_Food"]
+series = ["Haskell","programming"]
 +++
 
-> 标签：猫罐头
 
 > 来了，那么这一次，我们来整Typed Tagless Final Interpreters
 >

@@ -2,7 +2,7 @@
 date = "2020-04-01"
 title = "CPS Tutorial For Kindergarteners"
 katex = "true"
-series = ["Can_Food"]
+series = ["Haskell","paradigm","programming"]
 +++
 
 > "It was a detour that was our shortest path"  

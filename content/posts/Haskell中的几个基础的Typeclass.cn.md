@@ -2,10 +2,9 @@
 date = "2020-06-12"
 title = "Haskell中的几个基础的Typeclass"
 katex = "true"
-series = ["Can_Food"]
+series = ["Haskell","programming"]
 +++
 
-> 标签：猫罐头
 
 讲一些简单的东西，安利更多人打破内心的恐惧入坑 Haskell > w <
 
