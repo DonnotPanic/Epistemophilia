@@ -80,10 +80,10 @@ Without loss of generality, we shall assume $a\_r\not = 0$, otherwise we may hav
 Let the factorization of $f(x)$ into linear factor be:
 
 $$
-f(x)=(x-r\_1)^{e\_1}\cdots(x-r\_s)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{11}
+f(x)=(x-t\_1)^{e\_1}\cdots(x-t\_s)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{11}
 $$
 
-> We may assume $r\_i \in \mathbb C,i=1,2,\cdots,s$. By the fundamental thereom of algebra, the equation will be well-defined.
+> We may assume $t\_i \in \mathbb C,i=1,2,\cdots,s$. By the fundamental thereom of algebra, the equation will be well-defined.
 
 By comparing $k(x)$ (7) and $f(x)$ (10), we find the equation:
 
@@ -94,7 +94,7 @@ $$
 And corresponding to the factorization (11), we have:
 
 $$
-k(x)=(1-r\_1x)^{e\_1}\cdots(1-r\_sx)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{13}
+k(x)=(1-t\_1x)^{e\_1}\cdots(1-t\_sx)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{13}
 $$
 
 Since that $C(x)$ is the polynomial of degree at most $r-1$, smaller than the degree of $k(x)$, which is $r$. We may express the rational function $g(x)=\frac{C(x)}{k(x)}$ (8) in terms of partial fractions:
@@ -102,14 +102,14 @@ Since that $C(x)$ is the polynomial of degree at most $r-1$, smaller than the de
 $$
 \begin{align*}
 g(x)=\frac{C(x)}{k(x)}
-=\frac{\beta\_{11}}{(1-r\_1x)}+\cdots+\frac{\beta\_{1e\_1}}{(1-r\_1x)^{e\_1}}+\cdots+\frac{\beta\_{s1}}{(1-r\_sx)}+\cdots+\frac{\beta\_{se\_s}}{(1-r\_sx)^{e\_s}},
+=\frac{\beta\_{11}}{(1-t\_1x)}+\cdots+\frac{\beta\_{1e\_1}}{(1-t\_1x)^{e\_1}}+\cdots+\frac{\beta\_{s1}}{(1-t\_sx)}+\cdots+\frac{\beta\_{se\_s}}{(1-t\_sx)^{e\_s}},
 \end{align*}
 $$
 
 Use the $\sum$ notation to simplify the equation.
 
 $$
-g(x)=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}\frac{\beta\_{ij}}{(1-r\_ix)^{j}}=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}{\beta\_{ij}}{(1-r\_ix)^{-j}}, \tag{14}
+g(x)=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}\frac{\beta\_{ij}}{(1-t\_ix)^{j}}=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}{\beta\_{ij}}{(1-t\_ix)^{-j}}, \tag{14}
 $$
 
 where $\beta$'s are appropriate constants. We may use 
@@ -129,13 +129,13 @@ $$
 Merge the polynomial according to the power of $x$. We may have an equation looks similar to this:
 
 $$
-g(x)=\sum\_{n=0}^{\infty}\sum^{s}\_{i=1}\sum^{e\_i}\_{j=1}\beta\_{ij} C^{n+k-1}\_{k-1}r^n\_ix^n, \tag{17}
+g(x)=\sum\_{n=0}^{\infty}\sum^{s}\_{i=1}\sum^{e\_i}\_{j=1}\beta\_{ij} C^{n+j-1}\_{j-1}r^n\_ix^n, \tag{17}
 $$
 
 We note that:
 
 $$
-\sum\_{j=1}^{e\_i}\beta\_{ij}C^{n+k-1}\_{k-1}r\_i^{n}=P\_i(n)r\_i^n, \tag{18}
+\sum\_{j=1}^{e\_i}\beta\_{ij}C^{n+j-1}\_{j-1}t\_i^{n}=P\_i(n)t\_i^n, \tag{18}
 $$
 
 where $P\_i(n)$ is the polynomial of degree at most $e\_i-1$ in $n$. Substituting back to (6), we have:
@@ -143,14 +143,14 @@ where $P\_i(n)$ is the polynomial of degree at most $e\_i-1$ in $n$. Substitutin
 $$
 \begin{align*}
 g(x)&=\sum\_{n=0}^{\infty} u\_nx^n\\\\\\
-&=\sum\_{n=0}^{\infty}\sum\_{i=1}^{s}P\_i(n)r\_i^nx^n, \tag{19}
+&=\sum\_{n=0}^{\infty}\sum\_{i=1}^{s}P\_i(n)t\_i^nx^n, \tag{19}
 \end{align*}
 $$
 
 By comparing the coefficient of $x^n$, we have
 
 $$
-u\_n=\sum\_{i=1}^{s}P\_i(n)r\_i^n. \tag{20}
+u\_n=\sum\_{i=1}^{s}P\_i(n)t\_i^n. \tag{20}
 $$
 
 where $P\_i(n)$ is degree at most $e\_i-1$.
