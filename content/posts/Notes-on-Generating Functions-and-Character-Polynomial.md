@@ -7,6 +7,8 @@ series = ["combinatorics","math"]
 
 # Notes on Generating Functions and Character Polynomial
 
+## Generating Functions
+
 Generating Functions are formal power series that play important roles in Combinatorics. Specifically， We may assume that a generating functions should look like this:
 
 $$
@@ -34,7 +36,7 @@ $$
 
 even if the generating functions are not convergent.
 
-
+## Character Polynomial
 
 Suppose that a sequence $u\_0,u\_1,\cdots,u\_n,\cdots$ satisfies the recurrence of $r$th order:
 
@@ -130,7 +132,7 @@ $$
 g(x)=\sum\_{n=0}^{\infty}\sum^{s}\_{i=1}\sum^{e\_i}\_{j=1}\beta\_{ij} C^{n+k-1}\_{k-1}r^n\_ix^n, \tag{17}
 $$
 
- We note that:
+We note that:
 
 $$
 \sum\_{j=1}^{e\_i}\beta\_{ij}C^{n+k-1}\_{k-1}r\_i^{n}=P\_i(n)r\_i^n, \tag{18}
@@ -154,10 +156,9 @@ $$
 where $P\_i(n)$ is degree at most $e\_i-1$.
 
 
+## Example
 
-
-
-Example: Suppose we have a recurrence:
+Suppose we have a recurrence:
 $$
 \begin{align*}
 f\_1&=3\\\\\\
@@ -170,13 +171,13 @@ $$
 the character polynomial is:
 
 $$
-x^3-7x^2+16x-12=0, \tag{20}
+x^3-7x^2+16x-12=0, 
 $$
 
 By solving the equation we get:
 
 $$
-(x-2)^2(x-3)=0, \tag{21}
+(x-2)^2(x-3)=0, 
 $$
 
 We shall assume that $f\_n=(an+b)2^n+c3^n$
@@ -204,7 +205,7 @@ $$
 Substitute the coefficient, we have the general formula
 
 $$
-f\_n=3*2^nn-3^n. \tag{22}
+f\_n=3*2^nn-3^n.
 $$
 
 
@@ -212,5 +213,5 @@ Let's check the 10th of the sequence, by the recurrence we get:
 
 $f\_{4}=111,f\_5=237,f\_6=423, f\_7=501,f\_8=-417,f\_9=-5859,f\_{10}=-28329$.
 
-According to the formula (22) we get $f\_{10}=3*2^{10}*10-3^{10}=-28329$.
+According to the general formula we get $f\_{10}=3*2^{10}*10-3^{10}=-28329$.
 
