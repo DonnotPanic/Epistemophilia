@@ -78,7 +78,7 @@ Without loss of generality, we shall assume $a\_r\not = 0$, otherwise we may hav
 Let the factorization of $f(x)$ into linear factor be:
 
 $$
-f(x)=(x-r\_1)^{e\_1}\cdots(x-r\_s)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{10}
+f(x)=(x-r\_1)^{e\_1}\cdots(x-r\_s)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{11}
 $$
 
 > We may assume $r\_i \in \mathbb C,i=1,2,\cdots,s$. By the fundamental thereom of algebra, the equation will be well-defined.
@@ -86,13 +86,13 @@ $$
 By comparing $k(x)$ (7) and $f(x)$ (10), we find the equation:
 
 $$
-k(x)=x^rf(\frac{1}{x}). \tag{11}
+k(x)=x^rf(\frac{1}{x}). \tag{12}
 $$
 
 And corresponding to the factorization (11), we have:
 
 $$
-k(x)=(1-r\_1x)^{e\_1}\cdots(1-r\_sx)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{12}
+k(x)=(1-r\_1x)^{e\_1}\cdots(1-r\_sx)^{e\_s}, \quad e\_1+e\_2+\cdots + e\_s=r. \tag{13}
 $$
 
 Since that $C(x)$ is the polynomial of degree at most $r-1$, smaller than the degree of $k(x)$, which is $r$. We may express the rational function $g(x)=\frac{C(x)}{k(x)}$ (8) in terms of partial fractions:
@@ -107,33 +107,33 @@ $$
 Use the $\sum$ notation to simplify the equation.
 
 $$
-g(x)=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}\frac{\beta\_{ij}}{(1-r\_ix)^{j}}=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}{\beta\_{ij}}{(1-r\_ix)^{-j}}, \tag{13}
+g(x)=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}\frac{\beta\_{ij}}{(1-r\_ix)^{j}}=\sum\_{i=1}^{s}\sum\_{j=1}^{e\_i}{\beta\_{ij}}{(1-r\_ix)^{-j}}, \tag{14}
 $$
 
 where $\beta$'s are appropriate constants. We may use 
 
 $$
-g(x)=\sum\beta(1-rx)^{-k}, \tag{14}
+g(x)=\sum\beta(1-rx)^{-k}, \tag{15}
 $$
 
 to represent the formula.
 
-It's easy expand every component of (16) by bionomial formula:
+It's easy expand every component of (15) by bionomial formula:
 
 $$
-\beta(1-rx)^{-k}=\beta(\sum \_{i=0}^kC^{-i}\_{n}（-r x)^{i})=\beta(\sum\_{i=1}^{k}C\_{n+k-1}^{k-1}r^ix^i), \tag{15}
+\beta(1-rx)^{-k}=  \beta \sum\_{n=0}^{\infty} C^{n+k-1}\_{k-1} (rx)^n, \tag{16}
 $$
 
-Expand the formula and restruct it according to the power of $x$. We may have an equation looks similar to this:
+Merge the polynomial according to the power of $x$. We may have an equation looks similar to this:
 
 $$
-g(x)=\sum\_n^{\infty}\sum^{s}\_i\sum^{e\_i}\_j\beta\_{ij} C\_{n+k-1}^{k-1}r^n\_ix^n, \tag{16}
+g(x)=\sum\_{n=0}^{\infty}\sum^{s}\_{i=1}\sum^{e\_i}\_{j=1}\beta\_{ij} C^{n+k-1}\_{k-1}r^n\_ix^n, \tag{17}
 $$
 
  We note that:
 
 $$
-\sum\_{j=1}^{e\_i}\beta\_{ij}C\_{n+k-1}^{k-1}r\_i^{n}=P\_i(n)r\_i^n, \tag{17}
+\sum\_{j=1}^{e\_i}\beta\_{ij}C^{n+k-1}\_{k-1}r\_i^{n}=P\_i(n)r\_i^n, \tag{18}
 $$
 
 where $P\_i(n)$ is the polynomial of degree at most $e\_i-1$ in $n$. Substituting back to (6), we have:
@@ -141,14 +141,14 @@ where $P\_i(n)$ is the polynomial of degree at most $e\_i-1$ in $n$. Substitutin
 $$
 \begin{align*}
 g(x)&=\sum\_{n=0}^{\infty} u\_nx^n\\\\\\
-&=\sum\_{n=0}^{\infty}\sum\_{i=1}^{s}P\_i(n)r\_i^nx^n, \tag{18}
+&=\sum\_{n=0}^{\infty}\sum\_{i=1}^{s}P\_i(n)r\_i^nx^n, \tag{19}
 \end{align*}
 $$
 
 By comparing the coefficient of $x^n$, we have
 
 $$
-u\_n=\sum\_{i=1}^{s}P\_i(n)r\_i^n. \tag{19}
+u\_n=\sum\_{i=1}^{s}P\_i(n)r\_i^n. \tag{20}
 $$
 
 where $P\_i(n)$ is degree at most $e\_i-1$.
