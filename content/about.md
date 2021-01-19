@@ -3,7 +3,7 @@ title = "About Epistemophilia"
 slug = "about"
 +++
 
-I am currently a sophomore student majoring in computer science.
+I am currently a senior student majoring in computer science.
 
 This blog is a record of my study in SHU. 
 
