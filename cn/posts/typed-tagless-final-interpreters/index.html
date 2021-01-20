@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="cn">
+
+    <meta name="author" content="ChroniCat">
+    <meta name="description" content="来了，那么这一次，我们来整Typed Tagless Final Interpreters
+懂英语的筒子可以直接看这里：Typed Tagless-Final Interpretation: Introductory Course
+实现约定，文中所有data type用大写字母开头，普通函数用小写字母。
+ 首先解释一下题目，明眼人都看得出，这个标题由4个单词组成 [Typed , Tagless , Final , Interpreters] ，说明什么呢？说明我们这个blog就讲这四块，咱们先得从Interpreters 讲起。
+说到这个Interpreter，看过编译原理的小伙伴们开始高兴了，诶呀这题我会，这不就是写parser嘛，我老parser机器人了，手写AST(Abstract Syntax Tree)不在话下。好，到这一步的小伙伴都可以竖起耳朵狸，本文的受众就是你萌w。
+为什么说 Parser 不一定依赖 AST 呢，当然，AST 确实是一种看法，具体的来说把 data type 看作 AST 然后通过 interpreter 去 recessively deconstruct，这是一种从顶向下的看法，或者说，initial 的看法。与之相对的有一种叫 final 的看法，试图从底向上，从 eliminator (从没听过这个词？没关系，它就是 constructor 的对偶概念，看到后面就懂了) 的组合的角度设计 Interpreter。
+当然首先，我们得从 Initial Interpreter 讲起。
+Interpreter in the Initial Approach 之前说大家都写 AST 当然是调侃，其实大家不一定需要会写，本文所需求的计算机基础是很低的，与之相对的是不会讲得很深:-) 。不过最好懂一点 Haskell ，不用多，掌握 pattern match 和列表操作就够了。这里给两个推荐 real world haskell 以及 Write Yourself a Scheme in 48 Hours ，如果想进一步了解这个语言的话建议阅读。">
+    <meta name="keywords" content="blog,desenvolvedor,pessoal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Typed Tagless Final Interpreters"/>
+<meta name="twitter:description" content="来了，那么这一次，我们来整Typed Tagless Final Interpreters
+懂英语的筒子可以直接看这里：Typed Tagless-Final Interpretation: Introductory Course
+实现约定，文中所有data type用大写字母开头，普通函数用小写字母。
+ 首先解释一下题目，明眼人都看得出，这个标题由4个单词组成 [Typed , Tagless , Final , Interpreters] ，说明什么呢？说明我们这个blog就讲这四块，咱们先得从Interpreters 讲起。
+说到这个Interpreter，看过编译原理的小伙伴们开始高兴了，诶呀这题我会，这不就是写parser嘛，我老parser机器人了，手写AST(Abstract Syntax Tree)不在话下。好，到这一步的小伙伴都可以竖起耳朵狸，本文的受众就是你萌w。
+为什么说 Parser 不一定依赖 AST 呢，当然，AST 确实是一种看法，具体的来说把 data type 看作 AST 然后通过 interpreter 去 recessively deconstruct，这是一种从顶向下的看法，或者说，initial 的看法。与之相对的有一种叫 final 的看法，试图从底向上，从 eliminator (从没听过这个词？没关系，它就是 constructor 的对偶概念，看到后面就懂了) 的组合的角度设计 Interpreter。
+当然首先，我们得从 Initial Interpreter 讲起。
+Interpreter in the Initial Approach 之前说大家都写 AST 当然是调侃，其实大家不一定需要会写，本文所需求的计算机基础是很低的，与之相对的是不会讲得很深:-) 。不过最好懂一点 Haskell ，不用多，掌握 pattern match 和列表操作就够了。这里给两个推荐 real world haskell 以及 Write Yourself a Scheme in 48 Hours ，如果想进一步了解这个语言的话建议阅读。"/>
+
+    <meta property="og:title" content="Typed Tagless Final Interpreters" />
+<meta property="og:description" content="来了，那么这一次，我们来整Typed Tagless Final Interpreters
+懂英语的筒子可以直接看这里：Typed Tagless-Final Interpretation: Introductory Course
+实现约定，文中所有data type用大写字母开头，普通函数用小写字母。
+ 首先解释一下题目，明眼人都看得出，这个标题由4个单词组成 [Typed , Tagless , Final , Interpreters] ，说明什么呢？说明我们这个blog就讲这四块，咱们先得从Interpreters 讲起。
+说到这个Interpreter，看过编译原理的小伙伴们开始高兴了，诶呀这题我会，这不就是写parser嘛，我老parser机器人了，手写AST(Abstract Syntax Tree)不在话下。好，到这一步的小伙伴都可以竖起耳朵狸，本文的受众就是你萌w。
+为什么说 Parser 不一定依赖 AST 呢，当然，AST 确实是一种看法，具体的来说把 data type 看作 AST 然后通过 interpreter 去 recessively deconstruct，这是一种从顶向下的看法，或者说，initial 的看法。与之相对的有一种叫 final 的看法，试图从底向上，从 eliminator (从没听过这个词？没关系，它就是 constructor 的对偶概念，看到后面就懂了) 的组合的角度设计 Interpreter。
+当然首先，我们得从 Initial Interpreter 讲起。
+Interpreter in the Initial Approach 之前说大家都写 AST 当然是调侃，其实大家不一定需要会写，本文所需求的计算机基础是很低的，与之相对的是不会讲得很深:-) 。不过最好懂一点 Haskell ，不用多，掌握 pattern match 和列表操作就够了。这里给两个推荐 real world haskell 以及 Write Yourself a Scheme in 48 Hours ，如果想进一步了解这个语言的话建议阅读。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/" />
+<meta property="article:published_time" content="2020-05-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-05-04T00:00:00+00:00" /><meta property="og:site_name" content="Epistemophilia" /><meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/" /><meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/ski-%E7%BB%84%E5%90%88%E5%AD%90/" />
+<meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/" /><meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/ntt/" />
+
+
+
+    <title>
+  Typed Tagless Final Interpreters · Epistemophilia
+</title>
+
+    
+      <link rel="canonical" href="https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/">
+    
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css"
+      integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8/normalize.min.css">
+    
+      
+      
+      <link rel="stylesheet" href="https://blog.chronicat.xyz/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.80.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://blog.chronicat.xyz/cn">
+      Epistemophilia
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/about/">关于</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/posts/">博客</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/projects/">项目</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/contact/">联系方式</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://blog.chronicat.xyz/">English</a>
+              </li>
+            
+          
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Typed Tagless Final Interpreters</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2020-05-04T00:00:00Z'>
+                May 4, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              12-minute read
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <blockquote>
+<p>来了，那么这一次，我们来整Typed Tagless Final Interpreters</p>
+<p>懂英语的筒子可以直接看这里：<a href="http://okmij.org/ftp/tagless-final/course/">Typed Tagless-Final Interpretation: Introductory Course</a></p>
+<p>实现约定，文中所有data type用大写字母开头，普通函数用小写字母。</p>
+</blockquote>
+<p>首先解释一下题目，明眼人都看得出，这个标题由4个单词组成 <strong>[<code>Typed</code> , <code>Tagless</code> , <code>Final</code> , <code>Interpreters</code>]</strong> ，说明什么呢？说明我们这个blog就讲这四块，咱们先得从Interpreters 讲起。</p>
+<p>说到这个Interpreter，看过编译原理的小伙伴们开始高兴了，诶呀这题我会，这不就是写parser嘛，我老parser机器人了，手写AST(Abstract Syntax Tree)不在话下。好，到这一步的小伙伴都可以竖起耳朵狸，本文的受众就是你萌w。</p>
+<p>为什么说 Parser 不一定依赖 AST 呢，当然，AST 确实是一种看法，具体的来说把 data type 看作 AST 然后通过 interpreter 去 recessively deconstruct，这是一种从顶向下的看法，或者说，<strong>initial</strong> 的看法。与之相对的有一种叫 <strong>final</strong> 的看法，试图从底向上，从 <code>eliminator</code> (从没听过这个词？没关系，它就是 <code>constructor</code> 的对偶概念，看到后面就懂了) 的组合的角度设计 Interpreter。</p>
+<p>当然首先，我们得从 Initial Interpreter 讲起。</p>
+<h2 id="interpreter-in-the-initial-approach">Interpreter in the Initial Approach</h2>
+<p>之前说大家都写 AST 当然是调侃，其实大家不一定需要会写，本文所需求的计算机基础是很低的，<em>与之相对的是不会讲得很深:-)</em> 。不过最好懂一点 <strong>Haskell</strong> ，不用多，掌握 pattern match 和列表操作就够了。这里给两个推荐 <a href="http://book.realworldhaskell.org/">real world haskell</a> 以及 <a href="https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours">Write Yourself a Scheme in 48 Hours</a> ，如果想进一步了解这个语言的话建议阅读。</p>
+<p>进入正题，从 <strong>initial</strong> 的角度分析，AST 的节点实际上就对应一个 ADT(Algebraic Data Type) ，在 Haskell 里面写 ADT 是一件很简单的事情：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- 一个简单的加减法运算表达式类型</span>
+<span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Exp</span> = <span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#fff;font-weight:bold">Int</span>
+				 | <span style="color:#fff;font-weight:bold">Neg</span> <span style="color:#fff;font-weight:bold">Exp</span>
+				 | <span style="color:#fff;font-weight:bold">Add</span> <span style="color:#fff;font-weight:bold">Exp</span> <span style="color:#fff;font-weight:bold">Exp</span>
+</code></pre></div><blockquote>
+<p>如果你不知道 ADT 是什么也没关系，你可以想象一下BNF。</p>
+</blockquote>
+<p>可以看到 <code>Lit Int</code> 是 variable with type <code>Int</code>，而后所有的 op 都可以看作由 Exp 的特定封装。实际上这也很好理解，AST 中m个孩子的 op 节点对应 $\mathtt{op}:\mathtt{Exp^m}\rightarrow \mathtt{Exp}$。酷，我们发现了一个 AST 的节点就是这样的 ADT 的一个 value。擅长举一反三的童鞋可能立刻想到，我们的 variable 不一定是 Int 啊，什么类型都可以，比如：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- 看起来似乎没什么问题，然而真的如此吗？</span>
+<span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Exp</span> = <span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#fff;font-weight:bold">Float</span>
+         | <span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#fff;font-weight:bold">Int</span>
+         | <span style="color:#fff;font-weight:bold">Add</span> <span style="color:#fff;font-weight:bold">Exp</span> <span style="color:#fff;font-weight:bold">Exp</span>
+</code></pre></div><p>细心的童鞋可能会想到，Float 对应的 Add 和 Int 对应的 Add 其实是不一样的，而且 Float 和 Int 不能直接做加法，是的，为了保证操作的合法性，就需要引入更多的 Type System 的理论了，但是让我们先放慢脚步，从基础的 unitype 开始，我们只考虑 Int。</p>
+<p>考虑一个任意的加减法表达式 $8-(1+2)$ ，我们用加上相反数来替代减法 $8 + (-(1+2))$ ,用波兰式表示 $(+ 8\quad (-\quad (+\quad 1\quad 2)))$ 并加上类型封装：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">ti1 = <span style="color:#fff;font-weight:bold">Add</span> (<span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#ff0;font-weight:bold">8</span>) (<span style="color:#fff;font-weight:bold">Neg</span> (<span style="color:#fff;font-weight:bold">Add</span> (<span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#ff0;font-weight:bold">1</span>) (<span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#ff0;font-weight:bold">2</span>)))
+</code></pre></div><p>实际上我们要写的 Interpreter 就是能求对上述类型进行分解求值，就是这样一个<code>eliminator</code> 。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">eval :: <span style="color:#fff;font-weight:bold">Exp</span> -&gt; <span style="color:#fff;font-weight:bold">Int</span>  <span style="color:#007f7f">-- 函数的类型签名</span>
+eval (<span style="color:#fff;font-weight:bold">Lit</span> n) = n
+eval (<span style="color:#fff;font-weight:bold">Neg</span> e) = - eval e
+eval (<span style="color:#fff;font-weight:bold">Add</span> e1 e2) = eval e1 + eval e2
+
+ti1_eval = eval ti1 <span style="color:#007f7f">-- 5</span>
+</code></pre></div><p>实际上 Interpreter 是不唯一的，考虑一下 pretty-printing 函数：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">view :: <span style="color:#fff;font-weight:bold">Exp</span> -&gt; <span style="color:#fff;font-weight:bold">String</span>
+view (<span style="color:#fff;font-weight:bold">Lit</span> n) = show n <span style="color:#007f7f">-- show 可以理解为toString</span>
+view (<span style="color:#fff;font-weight:bold">Neg</span> e) = <span style="color:#0ff;font-weight:bold">&#34;(-&#34;</span> ++ view e ++<span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+view (<span style="color:#fff;font-weight:bold">Add</span> e1 e2) = <span style="color:#0ff;font-weight:bold">&#34;(&#34;</span> ++ view e1 ++ <span style="color:#0ff;font-weight:bold">&#34; + &#34;</span> ++ view e2 ++ <span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+
+ti1_view = view ti1 <span style="color:#007f7f">-- &#34;(8 + (-(1 + 2)))&#34;</span>
+</code></pre></div><p>好了，基础部分结束，大家现在对 Haskell 有了基础的印象，接下来我们回到正题。</p>
+<h2 id="interpreter-in-the-final-approach">Interpreter in the Final Approach</h2>
+<p>是滴，我们接下来会展现如何从底向上构建 Interpreter。以及展现 Haskell 的 <code>type class</code> 。</p>
+<p>我们来考虑一下，实际上每一个 ADT 对应的是一个 op，那我们为什么不索性把他们看作一个普通的函数？我们把这些函数的签名放进一个class里面，这就是type class。从上面的例子中我们知道 Interpreter 可以多种多样换着法子来，所以我们认为这里存在一个多态：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- 这里repr可以理解为类型C++里的模版所以type class就类似interface</span>
+<span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">ExpSYM</span> repr <span style="color:#fff;font-weight:bold">where</span>
+  lit :: <span style="color:#fff;font-weight:bold">Int</span>  -&gt; repr
+  neg :: repr -&gt; repr
+  add :: repr -&gt; repr -&gt; repr
+</code></pre></div><p>那么我们先考虑实现 eval ，因为最终的结果是整数，毫无疑问，是关于 ExpSYM Int 的实例：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Haskell" data-lang="Haskell"><span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">ExpSYM</span> <span style="color:#fff;font-weight:bold">Int</span> <span style="color:#fff;font-weight:bold">where</span>
+    lit n 		= n
+    neg e			= - e
+    add e1 e2 = e1 + e2
+</code></pre></div><p>接下来我们考虑如何从这个 instance 的 result (Int) 得到我们想要的 result (Int)：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">eval :: <span style="color:#fff;font-weight:bold">Int</span> -&gt; <span style="color:#fff;font-weight:bold">Int</span>
+eval = id <span style="color:#007f7f">-- id 表示identity，即返回自身</span>
+
+tf1 = add (lit <span style="color:#ff0;font-weight:bold">8</span>) (neg(add (lit <span style="color:#ff0;font-weight:bold">1</span>) (lit <span style="color:#ff0;font-weight:bold">2</span>))) 
+tf1_eval = eval tf1 <span style="color:#007f7f">-- 5</span>
+</code></pre></div><p>同理，我们可以得到关于 view 的interpreter。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Haskell" data-lang="Haskell"><span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">ExpSYM</span> <span style="color:#fff;font-weight:bold">String</span> <span style="color:#fff;font-weight:bold">where</span>
+		lit n 		= show n
+		neg n 		= <span style="color:#0ff;font-weight:bold">&#34;(-&#34;</span> ++ e ++ <span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+		add e1 e2 = <span style="color:#0ff;font-weight:bold">&#34;(&#34;</span> ++ e1 ++ <span style="color:#0ff;font-weight:bold">&#34; + &#34;</span> ++ e2 ++ <span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+		
+view:: <span style="color:#fff;font-weight:bold">String</span> -&gt; <span style="color:#fff;font-weight:bold">String</span>
+view = id
+
+tf1_view = view tf1 <span style="color:#007f7f">-- &#34;(8 + (-(1 + 2)))&#34;</span>
+</code></pre></div><p>为什么需要 Final Approach 的，原因很简单。</p>
+<p>考虑从 Intial Approach 得到的 Exp，我们现在要对它进行扩展，加上乘法运算，怎么办呢，方法一，修改原有的声明：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Exp</span> = <span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#fff;font-weight:bold">Int</span>
+         | ...
+         | <span style="color:#fff;font-weight:bold">Mul</span> <span style="color:#fff;font-weight:bold">Exp</span> <span style="color:#fff;font-weight:bold">Exp</span>
+</code></pre></div><p>但这么做是很危险的，如果你开发一个新功能，尚不清楚能否实现，但直接修改经过测试的正确封装的老代码，显然是行不通的。更不必提修改原有代码本身就是开销很大的事情。</p>
+<p>方法二，提升：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">MulExp</span> = <span style="color:#fff;font-weight:bold">EOld</span> <span style="color:#fff;font-weight:bold">Exp</span>
+            | <span style="color:#fff;font-weight:bold">Mul</span> <span style="color:#fff;font-weight:bold">MulExp</span> <span style="color:#fff;font-weight:bold">MulExp</span>
+            
+evalm:: <span style="color:#fff;font-weight:bold">MulExp</span> -&gt; <span style="color:#fff;font-weight:bold">Int</span>
+evalm (<span style="color:#fff;font-weight:bold">EOld</span> <span style="color:#fff;font-weight:bold">Exp</span>)  = eval <span style="color:#fff;font-weight:bold">Exp</span>
+evalm (<span style="color:#fff;font-weight:bold">Mul</span> e1 e2) = eval e1 * eval e2
+
+tim2 = <span style="color:#fff;font-weight:bold">Mul</span> (<span style="color:#fff;font-weight:bold">EOld</span> (<span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#ff0;font-weight:bold">7</span>)) (<span style="color:#fff;font-weight:bold">EOld</span> ti1) <span style="color:#007f7f">-- okay to eval</span>
+tim1 = <span style="color:#fff;font-weight:bold">EOld</span> (<span style="color:#fff;font-weight:bold">Add</span> (<span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#ff0;font-weight:bold">7</span>) (<span style="color:#fff;font-weight:bold">EOld</span> ti1)) <span style="color:#007f7f">-- failed</span>
+</code></pre></div><p>呜呜呜，看起来我们没有办法再更进一步了（其实是有的，但是太复杂了）</p>
+<p>那我们再来看看利用 Final Approach 如何实现扩展：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">MulSYM</span> repr <span style="color:#fff;font-weight:bold">where</span>
+    mul:: repr -&gt; repr -&gt; repr
+    
+<span style="color:#007f7f">-- 测试用例</span>
+tfm1 = add (lit <span style="color:#ff0;font-weight:bold">7</span>) (neg (mul (lit <span style="color:#ff0;font-weight:bold">1</span>) (lit <span style="color:#ff0;font-weight:bold">2</span>)))
+tfm2 = mul (lit <span style="color:#ff0;font-weight:bold">7</span>) tf1
+
+<span style="color:#007f7f">-- 实现</span>
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">MulSYM</span> <span style="color:#fff;font-weight:bold">Int</span> <span style="color:#fff;font-weight:bold">where</span>
+    mul e1 e2 = e1 * e2
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">MulSYM</span> <span style="color:#fff;font-weight:bold">String</span> <span style="color:#fff;font-weight:bold">where</span>
+    mul e1 e2 = <span style="color:#0ff;font-weight:bold">&#34;(&#34;</span> ++ e1 ++ <span style="color:#0ff;font-weight:bold">&#34; * &#34;</span> ++ e2 ++ <span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+    
+tfm1_eval = eval tfm1 <span style="color:#007f7f">-- 5</span>
+tfml_view = view tfm1 <span style="color:#007f7f">-- &#34;(7 + (-(1 * 2)))&#34;</span>
+</code></pre></div><p>完全不需要修改 <code>eval</code> 和 <code>view</code> 就能直接用，final 的方法的扩展性还是很强的。</p>
+<h2 id="pattern-matching-in-the-final-approach">Pattern-Matching in the final approach</h2>
+<p>从 initial 的角度，很容易进行 pattern match，比如考虑将 <code>ti1 = Add (Lit 8) (Neg (Add (Lit 1) (Lit 2)))</code> 改写成 normal form <code>Add (Lit 8) (Add (Neg (Lit 1)) (Neg (Lit 2)))</code>，所谓normal form，就是只有整数上才区分正负，表达式不能取负，即：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">push_neg :: <span style="color:#fff;font-weight:bold">Exp</span> -&gt; <span style="color:#fff;font-weight:bold">Exp</span>
+push_neg e@<span style="color:#fff;font-weight:bold">Lit</span>{} 						= e  		<span style="color:#007f7f">-- @ 是别名的意思即e=Lit{}</span>
+push_neg e@(<span style="color:#fff;font-weight:bold">Neg</span>(<span style="color:#fff;font-weight:bold">Lit</span> <span style="color:#fff;font-weight:bold">_</span>)) 		= e
+push_neg e@(<span style="color:#fff;font-weight:bold">Neg</span>(<span style="color:#fff;font-weight:bold">Neg</span> e)) 		= push_neg e
+push_neg e@(<span style="color:#fff;font-weight:bold">Neg</span>(<span style="color:#fff;font-weight:bold">Add</span> e1 e2)) = <span style="color:#fff;font-weight:bold">Add</span> (push_neg (<span style="color:#fff;font-weight:bold">Neg</span> e1)) (push_neg (<span style="color:#fff;font-weight:bold">Neg</span> e2))
+push_neg e@(<span style="color:#fff;font-weight:bold">Add</span> e1 e2)      = <span style="color:#fff;font-weight:bold">Add</span> (push_neg e1) (push_neg e2)
+
+ti1_norm = push_neg ti1
+ti1_norm_view = view ti1_norm  <span style="color:#007f7f">-- &#34;(8 + ((-1) + (-2)))&#34;</span>
+ti1_norm_eval = eval til_norm  <span style="color:#007f7f">-- 5</span>
+</code></pre></div><p>可以看到进行了 <code>push_neg</code> 的两层匹配。那么怎么从 final 的角度怎么进行pattern match呢？可以注意到 <code>push_neg</code> 因为有匹配两层Neg，所以很难直接进行组合。那该怎么做呢，组合的时候记录下内层是否是 Neg 就好了这样只需要匹配一层就可以做了。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Ctx</span> = <span style="color:#fff;font-weight:bold">Pos</span> | <span style="color:#fff;font-weight:bold">Neg</span>
+
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">ExpSYM</span> repr =&gt; <span style="color:#fff;font-weight:bold">ExpSYM</span> (<span style="color:#fff;font-weight:bold">Ctx</span> -&gt; repr) <span style="color:#fff;font-weight:bold">where</span>
+   lit n <span style="color:#fff;font-weight:bold">Pos</span> = lit n
+   lit n <span style="color:#fff;font-weight:bold">Neg</span> = neg (lit n)
+   neg e <span style="color:#fff;font-weight:bold">Pos</span> = e <span style="color:#fff;font-weight:bold">Neg</span>
+   neg e <span style="color:#fff;font-weight:bold">Neg</span> = e <span style="color:#fff;font-weight:bold">Pos</span>
+   add e1 e2 ctx = add (e1 ctx) (e2 ctx)
+   
+push_neg e = e <span style="color:#fff;font-weight:bold">Pos</span>
+
+tf1_norm = push_neg tf1
+tf1_norm_view = view tf1_norm  <span style="color:#007f7f">-- &#34;(8 + ((-1) + (-2)))&#34;</span>
+tf1_norm_eval = eval tf1_norm  <span style="color:#007f7f">-- 5</span>
+</code></pre></div><p>同样的，我们很轻松的就能将它扩展到 MulSYM ：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">MulSYM</span> repr =&gt; <span style="color:#fff;font-weight:bold">MulSYM</span> (<span style="color:#fff;font-weight:bold">Ctx</span> -&gt; repr) <span style="color:#fff;font-weight:bold">where</span>
+    mul e1 e2 <span style="color:#fff;font-weight:bold">Pos</span> = mul (e1 <span style="color:#fff;font-weight:bold">Pos</span>) (e2 <span style="color:#fff;font-weight:bold">Pos</span>)
+    mul e1 e2 <span style="color:#fff;font-weight:bold">Neg</span> = mul (e1 <span style="color:#fff;font-weight:bold">Neg</span>) (e2 <span style="color:#fff;font-weight:bold">Neg</span>)
+    
+tfm2_norm = push_neg tfm2
+tfm2_norm_view = view tfm2_norm  <span style="color:#007f7f">-- &#34;(7 * (8 + ((-1) + (-2))))&#34;</span>
+tfm2_norm_eval = eval tfm2_norm  <span style="color:#007f7f">-- 35</span>
+</code></pre></div><h3 id="flattening">Flattening</h3>
+<p>因为 normal form 下所有的负号都在加号里了，考虑到实际上加法满足结合律，我们完全可以把其树形结构变为线性。同样，我们先从 initial 开始介绍。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">flata :: Exp -&gt; Exp
+flata e@Lit{} = e
+flata e@Neg{} = e
+flata (Add (Add e1 e2) e3) = flata (Add e1 (Add e2 e3))
+flata (Add e1 e2)          = Add e1 (flata e2)
+
+norm = flata.push_neg
+ti3 = (Add ti1 (Neg (Neg ti1)))
+ti3_norm = norm ti3
+ti3_norm_view = view ti3_norm  -- &#34;(8 + ((-1) + ((-2) + (8 + ((-1) + (-2))))))&#34;
+ti3_norm_eval = eval ti3_norm  -- 10
+</code></pre></div><p>没什么好多解释的。final 的做法也是记录一下内层状态，LCA (left child of addition)。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Ctx</span> e = <span style="color:#fff;font-weight:bold">LCA</span> e | <span style="color:#fff;font-weight:bold">NonLCA</span>
+
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">ExpSYM</span> repr =&gt; <span style="color:#fff;font-weight:bold">ExpSYM</span> (<span style="color:#fff;font-weight:bold">Ctx</span> repr -&gt; repr) <span style="color:#fff;font-weight:bold">where</span>
+    lit n <span style="color:#fff;font-weight:bold">NonLCA</span>   = lit n
+    lit n (<span style="color:#fff;font-weight:bold">LCA</span> e)  = add (lit n) e
+    neg e <span style="color:#fff;font-weight:bold">NonLCA</span>   = neg (e <span style="color:#fff;font-weight:bold">NonLCA</span>)
+    neg e (<span style="color:#fff;font-weight:bold">LCA</span> e3) = add (neg (e <span style="color:#fff;font-weight:bold">NonLCA</span>)) e3
+    add e1 e2 ctx  = e1 (<span style="color:#fff;font-weight:bold">LCA</span> (e2 ctx))  <span style="color:#007f7f">-- C[Add e1 e2] =&gt; Add e1 C[e2]</span>
+
+tf3 = (add tf1 (neg (neg tf1)))
+tf3_view = view tf3  <span style="color:#007f7f">-- &#34;((8 + (-(1 + 2))) + (-(-(8 + (-(1 + 2))))))&#34;</span>
+tf3_eval = eval tf3  <span style="color:#007f7f">-- 10</span>
+</code></pre></div><p>其实到这里有的人应该已经懂了，其实就是加个 continuation 的事。从 final 的角度，continuation真的非常自然。</p>
+<p>实际上不考虑扩展性的情况下， initial 和 final 可以互相转化</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">ExpSYM</span> <span style="color:#fff;font-weight:bold">Exp</span> <span style="color:#fff;font-weight:bold">where</span>
+    lit = <span style="color:#fff;font-weight:bold">Lit</span>
+    neg = <span style="color:#fff;font-weight:bold">Neg</span>
+    add = <span style="color:#fff;font-weight:bold">Add</span>
+    
+initial :: <span style="color:#fff;font-weight:bold">Exp</span> -&gt; <span style="color:#fff;font-weight:bold">Exp</span>
+initial = id
+
+finalize :: <span style="color:#fff;font-weight:bold">ExpSYM</span> repr =&gt; <span style="color:#fff;font-weight:bold">Exp</span> -&gt; repr
+finalize (<span style="color:#fff;font-weight:bold">Lit</span> n)     = lit n
+finalize (<span style="color:#fff;font-weight:bold">Neg</span> e)     = neg (finalize e)
+finalize (<span style="color:#fff;font-weight:bold">Add</span> e1 e2) = add (finalize e1) (finalize e2)
+</code></pre></div><h2 id="interpreting-tagless-language">Interpreting Tagless language</h2>
+<p>之前我们一直谈的是比较简单的加减法程序的 interpreter，下面我们讲进入更复杂的情况。首先我们得明白，why tag is considered bad。</p>
+<h3 id="the-problem-of-tags">The Problem of Tags</h3>
+<p>考虑一个De Bruijn indice的 boolean lambda calculus解释器</p>
+<blockquote>
+<p>De Bruijn indice 是一种无需命名 bound variable 的 lambda calculus</p>
+<p>举例来说： λ<em>z</em>. (λ<em>y</em>. <em>y</em> (λ<em>x</em>. <em>x</em>)) (λ<em>x</em>. <em>z</em> <em>x</em>) 对应的 De Bruijn index 是 λ (λ 1 (λ 1)) (λ 2 1)，其中数字代表的是它是对应多少层之上的变量。<!-- raw HTML omitted --></p>
+</blockquote>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Exp</span> = <span style="color:#fff;font-weight:bold">V</span> <span style="color:#fff;font-weight:bold">Var</span>
+         | <span style="color:#fff;font-weight:bold">B</span> <span style="color:#fff;font-weight:bold">Bool</span>
+         | <span style="color:#fff;font-weight:bold">L</span> <span style="color:#fff;font-weight:bold">Exp</span>			<span style="color:#007f7f">-- lambda 接受一个表达式把它加入环境</span>
+         | <span style="color:#fff;font-weight:bold">A</span> <span style="color:#fff;font-weight:bold">Exp</span> <span style="color:#fff;font-weight:bold">Exp</span>  <span style="color:#007f7f">-- application 接受两个表达式，把第二个的结果代入第一个</span>
+<span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Var</span> = <span style="color:#fff;font-weight:bold">VZ</span> | <span style="color:#fff;font-weight:bold">VS</span> <span style="color:#fff;font-weight:bold">Var</span>  <span style="color:#007f7f">-- 0 := Z, 1:= S Z, 3 = S (S (S Z))</span>
+<span style="color:#007f7f">-- untyped 的 interpreter</span>
+<span style="color:#007f7f">{-
+</span><span style="color:#007f7f">eval0 env (V v) = lookp v env  -- lookp 的作用是在 env 里找 v 对应的 lambda
+</span><span style="color:#007f7f">eval0 env (B b) = b
+</span><span style="color:#007f7f">eval0 env (L e) = (\x -&gt; eval0 (x:env) e)
+</span><span style="color:#007f7f">eval0 env (A e1 e2) = (eval0 env e1) (eval0 env e2)
+</span><span style="color:#007f7f">-}</span>
+<span style="color:#007f7f">-- 显然 eval0 env (B b) 返回Bool， 而eval0 env (V v)返回一个function，故我们需要返回一个 Union Type</span>
+<span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">U</span> = <span style="color:#fff;font-weight:bold">UB</span> <span style="color:#fff;font-weight:bold">Bool</span> | <span style="color:#fff;font-weight:bold">UA</span> (<span style="color:#fff;font-weight:bold">U</span> -&gt; <span style="color:#fff;font-weight:bold">U</span>)
+
+lookp <span style="color:#fff;font-weight:bold">VZ</span> (x<span style="color:#fff;font-weight:bold">:</span><span style="color:#fff;font-weight:bold">_</span>) = x
+lookp (<span style="color:#fff;font-weight:bold">VS</span> v) (<span style="color:#fff;font-weight:bold">_</span><span style="color:#fff;font-weight:bold">:</span>env) = lookp v env
+
+eval :: [<span style="color:#fff;font-weight:bold">U</span>] -&gt; <span style="color:#fff;font-weight:bold">Exp</span> -&gt; <span style="color:#fff;font-weight:bold">U</span>
+eval env (<span style="color:#fff;font-weight:bold">V</span> v) = lookp v env
+eval env (<span style="color:#fff;font-weight:bold">B</span> b) = <span style="color:#fff;font-weight:bold">UB</span> b
+eval env (<span style="color:#fff;font-weight:bold">L</span> e) = <span style="color:#fff;font-weight:bold">UA</span> (\x -&gt; eval (x<span style="color:#fff;font-weight:bold">:</span>env) e)
+eval env (<span style="color:#fff;font-weight:bold">A</span> e1 e2) = <span style="color:#fff;font-weight:bold">case</span> eval env e1 <span style="color:#fff;font-weight:bold">of</span>
+                       <span style="color:#fff;font-weight:bold">UA</span> f -&gt; f (eval env e2)
+                       
+ti1 = <span style="color:#fff;font-weight:bold">A</span> (<span style="color:#fff;font-weight:bold">L</span> (<span style="color:#fff;font-weight:bold">V</span> <span style="color:#fff;font-weight:bold">VZ</span>)) (<span style="color:#fff;font-weight:bold">B</span> <span style="color:#fff;font-weight:bold">True</span>)
+ti1_eval = eval <span style="color:#fff;font-weight:bold">[]</span> til <span style="color:#007f7f">-- UB True</span>
+</code></pre></div><p>看起来 works，然而考虑如下反例：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">ti2a = <span style="color:#fff;font-weight:bold">A</span> (<span style="color:#fff;font-weight:bold">B</span> <span style="color:#fff;font-weight:bold">True</span>) (<span style="color:#fff;font-weight:bold">B</span> <span style="color:#fff;font-weight:bold">False</span>)  <span style="color:#007f7f">-- error， cannot apply a bool to a bool</span>
+ti2o = <span style="color:#fff;font-weight:bold">A</span> (<span style="color:#fff;font-weight:bold">L</span> (<span style="color:#fff;font-weight:bold">V</span> (<span style="color:#fff;font-weight:bold">VS</span> <span style="color:#fff;font-weight:bold">VZ</span>))) (<span style="color:#fff;font-weight:bold">B</span> <span style="color:#fff;font-weight:bold">True</span>)
+ti2o_eval = eval <span style="color:#fff;font-weight:bold">[]</span> ti20  <span style="color:#007f7f">-- error no way to lookp (VS VZ) in []</span>
+</code></pre></div><p>为了避免此类错误我们需要引入类型系统，我们想通过一个 type checker 确保程序要么返回一个 type-checked term 要么返回 type error，一个 type checker 是诸如此类的函数</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">typecheck :: <span style="color:#fff;font-weight:bold">Exp</span> -&gt; <span style="color:#fff;font-weight:bold">Either</span> <span style="color:#fff;font-weight:bold">ErrMsg</span> <span style="color:#fff;font-weight:bold">Exp</span>
+<span style="color:#fff;font-weight:bold">type</span> <span style="color:#fff;font-weight:bold">ErrMsg</span> = <span style="color:#fff;font-weight:bold">String</span>
+
+\term -&gt; <span style="color:#fff;font-weight:bold">case</span> typecheck term <span style="color:#fff;font-weight:bold">of</span>
+              <span style="color:#fff;font-weight:bold">Left</span> e  -&gt; putStrLn $ <span style="color:#0ff;font-weight:bold">&#34;Type error: &#34;</span> ++ e
+              <span style="color:#fff;font-weight:bold">Right</span> x -&gt; <span style="color:#fff;font-weight:bold">do</span>
+                         print $ eval <span style="color:#fff;font-weight:bold">[]</span> x
+                         <span style="color:#007f7f">-- ...</span>
+</code></pre></div><p>通过 typecheck 以后能保证 <code>eval [] x</code> 一定能返回值。</p>
+<p>实际上在 Pattern Match 的时候 type tags (UA, UB等) 会造成很大的负担，因为这相当于在经过了 type check 以后我们仍然需要在运行时 dynamic check。然而当我们 eval 的时候仍然需要知道tag 信息帮助我们执行不同的操作。这说明我们必须重新设计，从而将 type check 和 eval 更好的结合起来。</p>
+<h3 id="tagless">Tagless</h3>
+<p>同理，从 intial 开始我们 simply typed lambda calculus with booleans</p>
+<p>当然达到这点需要一些 GADT 的扩展，这里不用细究 GADT 是什么，总之我们现在可以用自由变元去约束 term 了。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Exp</span> env t <span style="color:#fff;font-weight:bold">where</span>
+    <span style="color:#fff;font-weight:bold">B</span> :: <span style="color:#fff;font-weight:bold">Bool</span>           -&gt; <span style="color:#fff;font-weight:bold">Exp</span> env <span style="color:#fff;font-weight:bold">Bool</span> 
+    <span style="color:#007f7f">-- Axiom: Boolean literal has type Bool in any environment</span>
+    <span style="color:#007f7f">-- 作用是接受一个Bool的表达式把它转化为表达式里的值，类似lit</span>
+    <span style="color:#fff;font-weight:bold">V</span> :: <span style="color:#fff;font-weight:bold">Var</span> env t      -&gt; <span style="color:#fff;font-weight:bold">Exp</span> env t 
+    <span style="color:#007f7f">-- Reference to a hypothesis</span>
+    <span style="color:#007f7f">-- 这里的t就是自由变元，可以是boolean或function</span>
+    <span style="color:#007f7f">-- 作用是通过Var对应的指标找到对应环境里的表达式</span>
+    <span style="color:#fff;font-weight:bold">L</span> :: <span style="color:#fff;font-weight:bold">Exp</span> (a,env) b  -&gt; <span style="color:#fff;font-weight:bold">Exp</span> env (a-&gt;b)			<span style="color:#007f7f">-- 这里的(,)可以类比(:)</span>
+    <span style="color:#007f7f">-- Implication introduction</span>
+    <span style="color:#007f7f">-- 从环境里接受一个 a 到结果 b 中的表达式</span>
+    <span style="color:#fff;font-weight:bold">A</span> :: <span style="color:#fff;font-weight:bold">Exp</span> env (a-&gt;b) -&gt; <span style="color:#fff;font-weight:bold">Exp</span> env a -&gt; <span style="color:#fff;font-weight:bold">Exp</span> env b
+    <span style="color:#007f7f">-- Implication elimination</span>
+    <span style="color:#007f7f">-- 将 a 应用到 a-&gt;b</span>
+    
+<span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Var</span> env t <span style="color:#fff;font-weight:bold">where</span>
+    <span style="color:#fff;font-weight:bold">VZ</span> :: <span style="color:#fff;font-weight:bold">Var</span> (t,env) t               <span style="color:#007f7f">-- Assumption axiom</span>
+    <span style="color:#007f7f">-- 当前环境的表达式</span>
+    <span style="color:#fff;font-weight:bold">VS</span> :: <span style="color:#fff;font-weight:bold">Var</span> env t -&gt; <span style="color:#fff;font-weight:bold">Var</span> (a,env) t  <span style="color:#007f7f">-- Weakening</span>
+    <span style="color:#007f7f">-- 上一层</span>
+</code></pre></div><p>比较和上面的不同，其实在 construct 的时候我们便利用了 type 从而避免了 type check 的烦恼。有了这些我们可以直接写 eval 了，其实和 eval0 一样，改都不用改。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">eval :: env -&gt; <span style="color:#fff;font-weight:bold">Exp</span> env t -&gt; t
+eval env (<span style="color:#fff;font-weight:bold">V</span> v) = lookp v env
+eval env (<span style="color:#fff;font-weight:bold">B</span> b) = b
+eval env (<span style="color:#fff;font-weight:bold">L</span> e) = \x -&gt; eval (x,env) e
+eval env (<span style="color:#fff;font-weight:bold">A</span> e1 e2) = (eval env e1) (eval env e2)
+
+lookp :: <span style="color:#fff;font-weight:bold">Var</span> env t -&gt; env -&gt; t
+lookp <span style="color:#fff;font-weight:bold">VZ</span> (x,<span style="color:#fff;font-weight:bold">_</span>)       = x              
+lookp (<span style="color:#fff;font-weight:bold">VS</span> v) (<span style="color:#fff;font-weight:bold">_</span>,env) = lookp v env
+</code></pre></div><p>总之，我们现在能够实现 tagless typed interpreter 了，可喜可贺。</p>
+<p>然后我们考虑一下如何实现 final tagless typed interpreter吧。我们实际上是找一个从 env 到值的映射代表表达式的结果。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- lookp</span>
+vz :: (a, b) -&gt; a
+vz (vc,<span style="color:#fff;font-weight:bold">_</span>)       = vc
+vs :: (t1 -&gt; t2) -&gt; (a, t1) -&gt; t2
+vs vp (<span style="color:#fff;font-weight:bold">_</span>, envr) = vp envr
+
+b bv env    = bv
+l e env     = \x -&gt; e (x,env)
+a e1 e2 env = (e1 env) (e2 env)
+</code></pre></div><p>让GHCi帮我们 infer 函数类型：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">b :: t -&gt; env -&gt; t
+l :: ((t1,env) -&gt; t) -&gt; env -&gt; t1 -&gt; t
+a :: (env -&gt; t1 -&gt; t) -&gt; (env -&gt; t1) -&gt; env -&gt; t
+</code></pre></div><p>是的，就这么简单。直接把大写改小写去掉eval就好了。</p>
+<p>和之前一样，我们可能会想要把通过 typeclass 实现多种解释，并且现在我们从 Boolean 进一步到 Int， 加上整数加法。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Haskell" data-lang="Haskell"><span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">Symantics</span> repr <span style="color:#fff;font-weight:bold">where</span>
+    int :: <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr h <span style="color:#fff;font-weight:bold">Int</span>      <span style="color:#007f7f">-- h 对应intial case中的 env</span>
+    add :: repr h <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr h <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr h <span style="color:#fff;font-weight:bold">Int</span>
+    
+    z   :: repr (a,h) a           		  <span style="color:#007f7f">-- 对应 vz</span>
+    s   :: repr h a -&gt; repr (any,h) a   <span style="color:#007f7f">-- 对应 vs</span>
+    lam :: repr (a,h) b -&gt; repr h (a-&gt;b)
+    app :: repr h (a-&gt;b) -&gt; repr h a -&gt; repr h b
+</code></pre></div><p>写到这大家就发现，怎么只是换个名字，这个类型签名怎么都差不多啊。intial 和 final 之间是不是有什么更广义的对应关系，没错，有的，下文会展示。</p>
+<p>同样的，我们通过 instance 新增 interpreter</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">newtype</span> <span style="color:#fff;font-weight:bold">R</span> h a = <span style="color:#fff;font-weight:bold">R</span> {unR :: h -&gt; a} 
+<span style="color:#007f7f">-- R和unR分别对应constructor和eliminater.</span>
+<span style="color:#007f7f">-- R的作用是接受一个环境到值的映射 (h-&gt;a) 然后返回包装(R h a)</span>
+<span style="color:#007f7f">-- unR则相反，把R h a还原成 (h-&gt;a)，unR可以理解为eval</span>
+<span style="color:#007f7f">-- 使用R是为了体现 interpreter 的名字是 user defined</span>
+
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Symantics</span> <span style="color:#fff;font-weight:bold">R</span> <span style="color:#fff;font-weight:bold">where</span>
+    int x     = <span style="color:#fff;font-weight:bold">R</span> $ const x    <span style="color:#007f7f">-- 接受一个环境(这里是Int)返回x本身(因为也是Int)</span>
+    add e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ \h -&gt; (unR e1 h) + (unR e2 h)
+    
+    z     = <span style="color:#fff;font-weight:bold">R</span> $ \(x,<span style="color:#fff;font-weight:bold">_</span>) -&gt; x       <span style="color:#007f7f">-- 环境里的第一层</span>
+    s v   = <span style="color:#fff;font-weight:bold">R</span> $ \(<span style="color:#fff;font-weight:bold">_</span>,h) -&gt; unR v h <span style="color:#007f7f">-- 更外一层</span>
+    lam e = <span style="color:#fff;font-weight:bold">R</span> $ \h -&gt; \x -&gt; unR e (x,h)
+    app e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ \h -&gt; (unR e1 h) (unR e2 h)
+    
+eval e = unR e <span style="color:#fff;font-weight:bold">()</span>  <span style="color:#007f7f">-- 从空环境开始</span>
+
+th3 = lam (\x -&gt; add (app x (int <span style="color:#ff0;font-weight:bold">1</span>)) (int <span style="color:#ff0;font-weight:bold">2</span>))
+th3_eval = eval th3 <span style="color:#007f7f">-- th3_eval :: (Int -&gt; Int) -&gt; Int</span>
+
+<span style="color:#007f7f">-- 再来个view</span>
+<span style="color:#fff;font-weight:bold">newtype</span> <span style="color:#fff;font-weight:bold">S</span> h a = <span style="color:#fff;font-weight:bold">S</span> {unS :: <span style="color:#fff;font-weight:bold">Int</span> -&gt; <span style="color:#fff;font-weight:bold">String</span>}
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Symantics</span> <span style="color:#fff;font-weight:bold">S</span> <span style="color:#fff;font-weight:bold">where</span>
+    int x     = <span style="color:#fff;font-weight:bold">S</span> $ const $ show x
+    add e1 e2 = <span style="color:#fff;font-weight:bold">S</span> $ \h -&gt;
+      <span style="color:#0ff;font-weight:bold">&#34;(&#34;</span> ++ unS e1 h ++ <span style="color:#0ff;font-weight:bold">&#34; + &#34;</span> ++ unS e2 h ++ <span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+      
+    z     = <span style="color:#fff;font-weight:bold">S</span> $ \h -&gt; <span style="color:#0ff;font-weight:bold">&#34;x&#34;</span> ++ show (h-<span style="color:#ff0;font-weight:bold">1</span>)
+    s v   = <span style="color:#fff;font-weight:bold">S</span> $ \h -&gt; unS v (h-<span style="color:#ff0;font-weight:bold">1</span>)
+    lam e = <span style="color:#fff;font-weight:bold">S</span> $ \h -&gt;
+        <span style="color:#fff;font-weight:bold">let</span> x = <span style="color:#0ff;font-weight:bold">&#34;x&#34;</span> ++ show h
+        <span style="color:#fff;font-weight:bold">in</span> <span style="color:#0ff;font-weight:bold">&#34;(</span><span style="color:#0ff;font-weight:bold">\\</span><span style="color:#0ff;font-weight:bold">&#34;</span> ++ x ++ <span style="color:#0ff;font-weight:bold">&#34; -&gt; &#34;</span> ++
+             unS (e (<span style="color:#fff;font-weight:bold">S</span> $ const x)) (succ h) ++ <span style="color:#0ff;font-weight:bold">&#34;)&#34;</span>
+        
+view :: <span style="color:#fff;font-weight:bold">S</span> <span style="color:#fff;font-weight:bold">()</span> a -&gt; <span style="color:#fff;font-weight:bold">String</span>
+view e = unS e <span style="color:#ff0;font-weight:bold">0</span>
+
+th3_view = view th3 <span style="color:#007f7f">-- &#34;(\\x0 -&gt; ((x0 1)+2))&#34;</span>
+</code></pre></div><p>除了 lambda 的表达变化比较大，其它都大同小异。</p>
+<p>实际上可以由于 Haskell 会保留环境信息，所以可以更进一步简化：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">newtype</span> <span style="color:#fff;font-weight:bold">R</span> a = <span style="color:#fff;font-weight:bold">R</span>{unR :: a}
+
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Symantics</span> <span style="color:#fff;font-weight:bold">R</span> <span style="color:#fff;font-weight:bold">where</span>
+    int x     = <span style="color:#fff;font-weight:bold">R</span> x
+    add e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ unR e1 + unR e2
+    
+    lam f     = <span style="color:#fff;font-weight:bold">R</span> $ unR.f.<span style="color:#fff;font-weight:bold">R</span>
+    app e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ (unR e1) (unR e2)
+    
+eval = unR
+</code></pre></div><p>同理，可以加上 pretty print</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">type</span> <span style="color:#fff;font-weight:bold">VarCounter</span> = <span style="color:#fff;font-weight:bold">Int</span>
+<span style="color:#fff;font-weight:bold">newtype</span> <span style="color:#fff;font-weight:bold">S</span> a = <span style="color:#fff;font-weight:bold">S</span> {unS :: <span style="color:#fff;font-weight:bold">VarCounter</span> -&gt; <span style="color:#fff;font-weight:bold">String</span>}
+
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Symantics</span> <span style="color:#fff;font-weight:bold">S</span> <span style="color:#fff;font-weight:bold">where</span>
+    int x     = <span style="color:#fff;font-weight:bold">R</span> $ const x
+    add e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ \h -&gt; (unR e1 h) + (unR e2 h)
+
+    z     = <span style="color:#fff;font-weight:bold">R</span> $ \(x,<span style="color:#fff;font-weight:bold">_</span>) -&gt; x
+    s v   = <span style="color:#fff;font-weight:bold">R</span> $ \(<span style="color:#fff;font-weight:bold">_</span>,h) -&gt; unR v h
+    lam e = <span style="color:#fff;font-weight:bold">R</span> $ \h -&gt; \x -&gt; unR e (x,h)
+    app e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ \h -&gt; (unR e1 h) (unR e2 h)
+
+view e = unS e <span style="color:#ff0;font-weight:bold">0</span>
+</code></pre></div><p>同样，也可以做扩展：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- * Multiplication</span>
+<span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">MulSYM</span> repr <span style="color:#fff;font-weight:bold">where</span>
+    mul :: repr <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr <span style="color:#fff;font-weight:bold">Int</span>
+<span style="color:#007f7f">-- * Booleans</span>
+<span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">BoolSYM</span> repr <span style="color:#fff;font-weight:bold">where</span>
+    bool :: <span style="color:#fff;font-weight:bold">Bool</span> -&gt; repr <span style="color:#fff;font-weight:bold">Bool</span>             <span style="color:#007f7f">-- bool literal</span>
+    leq :: repr <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr <span style="color:#fff;font-weight:bold">Int</span> -&gt; repr <span style="color:#fff;font-weight:bold">Bool</span>
+    if_ :: repr <span style="color:#fff;font-weight:bold">Bool</span> -&gt; repr a -&gt; repr a -&gt; repr a
+<span style="color:#007f7f">-- * Fixpoint</span>
+<span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">FixSYM</span> repr <span style="color:#fff;font-weight:bold">where</span>
+    fix :: (repr a -&gt; repr a)  -&gt; repr a
+
+<span style="color:#007f7f">-- Extension on R</span>
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">MulSYM</span> <span style="color:#fff;font-weight:bold">R</span> <span style="color:#fff;font-weight:bold">where</span>
+    mul e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ unR e1 * unR e2
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">BoolSYM</span> <span style="color:#fff;font-weight:bold">R</span> <span style="color:#fff;font-weight:bold">where</span>
+    bool b    = <span style="color:#fff;font-weight:bold">R</span> b
+    leq e1 e2 = <span style="color:#fff;font-weight:bold">R</span> $ unR e1 &lt;= unR e2
+    if_ be et ee = <span style="color:#fff;font-weight:bold">R</span> $ <span style="color:#fff;font-weight:bold">if</span> unR be <span style="color:#fff;font-weight:bold">then</span> unR et <span style="color:#fff;font-weight:bold">else</span> unR ee 
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">FixSYM</span> <span style="color:#fff;font-weight:bold">R</span> <span style="color:#fff;font-weight:bold">where</span>
+    fix f = <span style="color:#fff;font-weight:bold">R</span> $ fx (unR . f . <span style="color:#fff;font-weight:bold">R</span>) <span style="color:#fff;font-weight:bold">where</span> fx f = f (fx f)
+
+tpow  = lam (\x -&gt; fix (\self -&gt; lam (\n -&gt;
+                        if_ (leq n (int <span style="color:#ff0;font-weight:bold">0</span>)) (int <span style="color:#ff0;font-weight:bold">1</span>)
+                            (mul x (app self (add n (int (-<span style="color:#ff0;font-weight:bold">1</span>))))))))
+<span style="color:#007f7f">-- repr (Int -&gt; Int -&gt; Int)</span>
+tpow7 = lam (\x -&gt; app (app tpow x) (int <span style="color:#ff0;font-weight:bold">7</span>))
+tpow72 = app tpow7 (int <span style="color:#ff0;font-weight:bold">2</span>)
+tpow72_eval = eval tpow72 <span style="color:#007f7f">-- 128</span>
+</code></pre></div><p>同理，initial 和 final 的 tagless encoding 也有对应关系</p>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+      <h3>See also in Haskell</h3>
+      <nav>
+        <ul>
+        
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/">Haskell中的几个基础的Typeclass</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/ski-%E7%BB%84%E5%90%88%E5%AD%90/">SKI 组合子</a>
+            </li>
+          
+        
+          
+        
+        </ul>
+      </nav>
+    
+  
+    
+    
+    
+      <h3>See also in programming</h3>
+      <nav>
+        <ul>
+        
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/">Haskell中的几个基础的Typeclass</a>
+            </li>
+          
+        
+          
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/ntt/">五分钟学会快速数论变换</a>
+            </li>
+          
+        
+        </ul>
+      </nav>
+    
+  
+</section>
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chronicat-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,
+      {
+        delimiters: [
+          {left: '$$', right: '$$', display:true},
+          {left: '$', right: '$', display:false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      }
+    );"></script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>海洋和沙岸却将永远存在。</p>
+      
+      
+        ©
+        
+        2021
+         ChroniCat 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+        
+        <script src="https://blog.chronicat.xyz/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+      
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

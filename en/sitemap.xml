@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/</loc>
+    <lastmod>2021-01-19T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/</loc>
+    <lastmod>2021-01-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/lexer/</loc>
+    <lastmod>2021-01-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/posts/</loc>
+    <lastmod>2021-01-19T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/posts/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/</loc>
+    <lastmod>2021-01-19T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/series/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/series/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/combinatorics/</loc>
+    <lastmod>2020-09-14T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/series/combinatorics/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/series/combinatorics/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/math/</loc>
+    <lastmod>2020-09-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/posts/notes-on-generating-functions-and-character-polynomial/</loc>
+    <lastmod>2020-09-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/</loc>
+    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/haskell/</loc>
+    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/series/haskell/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/series/haskell/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/paradigm/</loc>
+    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/series/paradigm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/series/paradigm/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/series/programming/</loc>
+    <lastmod>2020-04-01T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/series/programming/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/series/programming/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/about/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/about/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/about/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/categories/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/categories/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/contact/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/contact/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/contact/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/projects/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/projects/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/projects/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://blog.chronicat.xyz/tags/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="cn"
+                href="https://blog.chronicat.xyz/cn/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.chronicat.xyz/tags/"
+                />
+  </url>
+  
+</urlset>

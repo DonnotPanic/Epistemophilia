@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="ChroniCat">
+    <meta name="description" content="In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.
+Nowadays, a technique called Parser Combinator may blur the boundary between parsers and lexers. However, how to use a Parser Combinator efficiently still demands a good knowledge of lexers. Besides, a Parser Combinator is LL(k), that means you have to manually eliminate left recursion.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Head First Lexical Analysis(1)"/>
+<meta name="twitter:description" content="In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.
+Nowadays, a technique called Parser Combinator may blur the boundary between parsers and lexers. However, how to use a Parser Combinator efficiently still demands a good knowledge of lexers. Besides, a Parser Combinator is LL(k), that means you have to manually eliminate left recursion."/>
+
+    <meta property="og:title" content="Head First Lexical Analysis(1)" />
+<meta property="og:description" content="In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.
+Nowadays, a technique called Parser Combinator may blur the boundary between parsers and lexers. However, how to use a Parser Combinator efficiently still demands a good knowledge of lexers. Besides, a Parser Combinator is LL(k), that means you have to manually eliminate left recursion." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/" />
+<meta property="article:published_time" content="2021-01-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-01-19T00:00:00+00:00" />
+
+
+
+    <title>
+  Head First Lexical Analysis(1) · Epistemophilia
+</title>
+
+    
+      <link rel="canonical" href="https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/">
+    
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css"
+      integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8/normalize.min.css">
+    
+      
+      
+      <link rel="stylesheet" href="https://blog.chronicat.xyz/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.80.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://blog.chronicat.xyz/">
+      Epistemophilia
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/posts/">Blogs</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/contact/">Contact me</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://blog.chronicat.xyz/cn/">Chinese</a>
+              </li>
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Head First Lexical Analysis(1)</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2021-01-19T00:00:00Z'>
+                January 19, 2021
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              11-minute read
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <p>In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.</p>
+<p>Nowadays, a technique called <strong>Parser Combinator</strong> may blur the boundary between parsers and lexers. However, how to use a <strong>Parser Combinator</strong> efficiently still demands a good knowledge of lexers. Besides, a <strong>Parser Combinator</strong> is <strong>LL(k)</strong>, that means you have to manually eliminate left recursion. If you want to use some other parsers like <strong>LALR</strong> or if you don&rsquo;t know how to write good <strong>Regular Expression</strong>, do some lexical analysis would be inevitable.</p>
+<h1 id="lexical-analysis-in-general">Lexical Analysis in General</h1>
+<p>Generally speaking, the process of lexical analysis contains five parts:</p>
+<ul>
+<li>Define language tokens using regular expressions</li>
+<li>Convert the regular expressions into NFA</li>
+<li>Convert NFA to DFA</li>
+<li>Simplify DFA to minimal DFA</li>
+<li>Convert minial DFA to scanner</li>
+</ul>
+<p>As a head first style tutorial, we may assume the readers have little or no knowledge of automata theory. This material is self-contained.</p>
+<h1 id="basic-concepts">Basic Concepts</h1>
+<p>You might have seen this picture before:</p>
+
+
+<center><img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Chomsky-hierarchy.svg" alt="Chomsky Hierarchy" style="zoom:50%;" /><br/>
+<b>Fig 1: Chomsky Hierarchy</b></center>
+
+
+<p>It is called the <strong>Chomsky Hierachy</strong>, a containment hierarchy of formal grammars.</p>
+<p>Before we go deeper into it, we should know some basic concepts of <code>language</code> and <code>automaton</code>.</p>
+<p>An automata is nothing but some states and rules on it that determines the way we transists between these states.</p>
+<p>An <strong>alphabet</strong> is a set of some symbols. A <strong>language</strong> is the subset of <em>kleene clousure of an given alphabet</em>, the set of all possible combinations of these symbols. The elements of language must be ended with a so-called <strong>terminator</strong>. We call the elements of the language <strong>words</strong>.</p>
+<p>And we may find the process of generating a language correspends to some kind of automata. In other word, we may use an automata to detect all the words in a languge. An automata must consist initial states, final states/accept states, symbols which will be concatenated into words, and the rules that determine the way we transits between various states while producing some symbols. This rules is called <em>transition function</em>, and it is usually represented as triple (from_state, output_symbol, to_state) or as function (from_state, symbol) -&gt; to_state.</p>
+<p>The Chomsky hierarchy somehow reveals us the corresponding relationship between automaton and language with the restriction getting stronger and stronger.</p>
+<table>
+<thead>
+<tr>
+<th>Grammar</th>
+<th>Languages</th>
+<th>Automaton</th>
+<th>Production rules</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type-0</td>
+<td>Recursively enumerable</td>
+<td>Turing machine</td>
+<td>$\gamma \to \alpha$</td>
+</tr>
+<tr>
+<td>Type-1</td>
+<td>Context-sensitive</td>
+<td>Linear-bounded non-deterministic Turing machine</td>
+<td>$\alpha A \beta \to \alpha \gamma \beta$</td>
+</tr>
+<tr>
+<td>Type-2</td>
+<td>Context-free</td>
+<td>Non-deterministic pushdown automaton</td>
+<td>$A \to \alpha$</td>
+</tr>
+<tr>
+<td>Type-3</td>
+<td>Regular</td>
+<td>Finite state automaton</td>
+<td>$A \to$ a<!-- raw HTML omitted --> and <!-- raw HTML omitted --> $A\to$a$B$</td>
+</tr>
+</tbody>
+</table>
+<p>Every symbol in Profuction rules represents a set of strings. In detail:</p>
+<ul>
+<li>a = terminal</li>
+<li>$A$, $B$ = non-terminal</li>
+<li>$\gamma$ = never empty string of terminals and non-terminals</li>
+<li>$\alpha$, $\beta$ = maybe empty string of terminals and non-terminals</li>
+</ul>
+<p>The non-terminal means this production part is somewhat recursive , it can be replaced again and again until it is finally replaced by a terminal.</p>
+<p>As you see, from type-0 to type-3, the production rules get less and less flexible. The recursively enumerable language is something you go whatever way you want, just remember to stop in the end. However, the context-sensitive language, you must start from a set of strings that contains a part which is non-terminal and the $\alpha$ and $\beta$ will determine whether the inner part $A$ could be replaced by $\gamma$ so that you could stop, in other word, it is monotonous. The context-free language remove the felxibility from $\alpha$ and $\beta$. And the regular language is the most strict one, the generating of strings must only be right recursive.</p>
+<p>As for recursively enumerative language, it is equivalent to a Turing machine, which we don&rsquo;t care that much since this is a blog on lexical analysis rather than some introduction to automaton theory. Knowing that Turing machine is a tape head moving unbounded ly on an infinite tape would be just enough. The same to context-sensitive languge which we know that it corresponds to <strong>LBA (Linear Bounded Automata)</strong> and it restricts the length of the tape to be no more than its alphabet plus two endmarks on both ends. The CFG (context-free grammar) is something important for a parser, we wouldn&rsquo;t go that far by now, just roughly go through it.</p>
+<p>We know how to recognize Context-free grammar very well by <strong>PDA (Pushdown Automata)</strong>. A Pushdown Automata is somewhat close to the computation model in CS. It contains an input tape, a finite control (transition function) and, what&rsquo;s more, a stack. The top of the stack determines the transition.</p>
+<p>And now it&rsquo;s regular language. We will discuss it thoroughly in the rest of this blog.</p>
+<h1 id="regular-expression">Regular Expression</h1>
+<p>In short, regular expression are what we use to denote regular language for the sake of succinctness. Remember that regular expression is right recursive? For any word that is regular, it is either generated sequencely if we choose different element from $A$ and $B$, or it maybe a loop if we choose the same one, or the combination of them.</p>
+<p>So we have the basic operators in regular expression. We may have  three of them to work perfectly well, however, for convenience, we adapt some other.</p>
+<ol>
+<li>$\epsilon$: an empty expression.</li>
+<li>Concatenation (r1$\cdot$r2): first r1, then r2. We would omit ($\cdot$)  normally.</li>
+<li>Union (r1|r2​): either r1​ or r2.</li>
+<li>Kleene Star (r1)*: zero or more r1.</li>
+<li>(r1)+ = r1$\cdot$(r1)*: one or more r1.</li>
+<li>(r1)? = $\epsilon$ | r1: zero or one r1.</li>
+</ol>
+<p>For instance if you want to express {lex, lexical, love, like, likely}, you may write something like: <code>l(ex(ical)?|ove|ike(ly)?)</code> or simply:<code>l*</code></p>
+<p>The latter contains much more words that the former, however, both of them can match these given words.</p>
+<h1 id="re-to-nfa">RE to NFA</h1>
+<p>As we said before, RE (Regular Expression) corresponds to a FSA (Finite State Automata). But let&rsquo;s start with the conversion of NFA (Non-deterministic Finite Automata)</p>
+<h2 id="thompsons-methods">Thompson&rsquo;s methods</h2>
+<p>According to Thompson&rsquo;s construction. By using $\epsilon$-transition, one can easily convert any RE to NFA. Rules are rather simple:</p>
+<blockquote>
+<p>For all states, there is a loop on it which output an $\epsilon$.</p>
+</blockquote>
+<p>The <strong>empty-expression</strong> is convert to：</p>
+
+
+<center>
+<img src ="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Thompson-a-symbol.svg/278px-Thompson-epsilon.svg.png" alt="inline" />
+</center>
+
+
+<blockquote>
+<p>The arrow points to q with new previous node means that q is the initial states, as we go from q to f, which is rounded by two circles denoting that f is the final states, we will output $\epsilon$, an empty-expression.</p>
+</blockquote>
+<p>Similarly, a symbol a is converted to:</p>
+
+
+<center>
+<img src ="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Thompson-a-symbol.svg/278px-Thompson-a-symbol.svg.png" alt="inline" />
+</center>
+
+
+<p>Union expression (|) is converted to:</p>
+
+
+<center>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Thompson-or.svg/453px-Thompson-or.svg.png" alt="inline" style="zoom: 67%;" />
+</center>
+
+
+<p>Concatenation expression ($\cdot$) is converted to:</p>
+
+
+<center>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Thompson-concat.svg/398px-Thompson-concat.svg.png" alt="inline" style="zoom:67%;" />
+</center>
+
+
+<p>Kleene star expression (*) is converted to:</p>
+<p><!-- raw HTML omitted --></p>
+<p>While being managed to convert, the large amount of intermediate states and abusion of $\epsilon$-transition makes it completely unusable, since any given strings must contain infinite $\epsilon$.</p>
+<h2 id="impovement-on-thompsons-construction">Impovement on Thompson&rsquo;s Construction</h2>
+<p>However, here is the good new, any NFA with $\epsilon$ can be converted to NFA without $\epsilon$. And let&rsquo;s find out how&rsquo;s the method gonna work.</p>
+<p>In general, it will be finished in three steps:</p>
+<ol>
+<li>Find out all $\epsilon$ transition from each state. That is called $\epsilon$-closure. In other word, all the possible states reachable within $\epsilon$-transition.</li>
+<li>Obtain a new transition function, which is the $\epsilon$-closure of previous transition act on each $\epsilon$-closure of previous nodes.</li>
+<li>Use the resultant states to replace original states.</li>
+</ol>
+<p>Example:</p>
+<p>Suppose there is a RE: <code>l(mao|ol)</code>.</p>
+<p>First, construct a NFA with $\epsilon$:</p>
+
+
+<center>
+<img src="https://blog.chronicat.xyz/lexical_analysis/lexical_analysis_3.png" style="zoom:50%;" />
+</center>
+
+
+<p>Then find all the $\epsilon$-closure.</p>
+<table>
+<thead>
+<tr>
+<th>States</th>
+<th>$\epsilon$-closures</th>
+<th>States</th>
+<th>$\epsilon$-closures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r0</td>
+<td>r0</td>
+<td>r5</td>
+<td>r5,f</td>
+</tr>
+<tr>
+<td>r1</td>
+<td>r1,r2,r6</td>
+<td>r6</td>
+<td>r6</td>
+</tr>
+<tr>
+<td>r2</td>
+<td>r2</td>
+<td>r7</td>
+<td>r7</td>
+</tr>
+<tr>
+<td>r3</td>
+<td>r3</td>
+<td>r8</td>
+<td>r8,f</td>
+</tr>
+<tr>
+<td>r4</td>
+<td>r4</td>
+<td>f</td>
+<td>f</td>
+</tr>
+</tbody>
+</table>
+<p>The new transition function is obtained by $\delta'(r,x)=\epsilon\text{-closure}(\delta(\epsilon\text{-closure}(r),x))$.</p>
+<p>And the new one will be similar to previous one except on r0, r1, r5 and r8.</p>
+<p>$\delta'(r0,l)=\{r1,r2,r6\}$, $\delta'(r1,m) = \{r3\}$, $\delta'(r1,o)=\{r7\}$, $\delta'(r5,\_)=\empty$, $\delta'(r8,\_)=\empty$</p>
+<p>So the final NFA looks like this:</p>
+
+
+<center>
+<img src="https://blog.chronicat.xyz/lexical_analysis/lexical_analysis_4.png" style="zoom: 50%;" />
+</center>
+
+
+<p>Yes, there is no $\epsilon$-transition at all. But this is a bad NFA since there is still so many unneccessary states on it!</p>
+<h2 id="berry-sethi-algorithm">Berry-Sethi Algorithm</h2>
+<p>There is another method called Glushkov&rsquo;s construction which says we need no more than M+1 states in our NFA (M is the number of all characters in our RE). However, I&rsquo;m not going to talk about his original methods directly, but give an equivalent version of it, called Berry-Sethi algorithm which is more understandable.</p>
+<blockquote>
+<p>This version is strongly connected to Brzozowski Derivatives, which will show up again when we talk about DFAs.</p>
+</blockquote>
+<p>To illustrate this algorithm, why not take <code>(ab)*b(a|b)</code> as the example.</p>
+<p>The main concept of Berry-Sethi is to use ($\cdot$) as separator so as to divide-and-conquer. In detail, such a RE could be viewed as a tree:</p>
+
+
+
+<div style="flex: 0 1 auto; "><center><img src="https://blog.chronicat.xyz/lexical_analysis/lexical_analysis_1.svg" style="zoom: 67%;"  />
+  <img src="https://blog.chronicat.xyz/lexical_analysis/lexical_analysis_2.svg" style="zoom: 67%;"  /></center></div>
+
+
+
+<p>For convenience, the tree are labeled with numbers like.</p>
+<p>For a given string, to check whether it is valid according to this RE. We will go downwards the tree and see whether the leaf euqals to the character in the string, after that, go upwards to the next possible leaf. In this process, the ups and the downs are seperated by leafs (or (*) which means we could neglect this part). And by ($\cdot$), which means we have to traverse its left child and then its right child, this process is divided into several subprocesses.</p>
+<p>First, it&rsquo;s important like to know whether a subprocess is negelectable, if some subprocess is negelectable, it either is (*) or have neglectable children. We define Empty[] for each node and traverse it in postorder so that:​</p>
+<ul>
+<li>Empty[$\epsilon$] = true</li>
+<li>​Empty[x] = false (x is an arbitrary leaf)
+-​ Empty[r1*] = true</li>
+<li>​Empty[r1|r2] = Empty[r1] or Empty[r2]</li>
+<li>Empty[r1$\cdot$r2] = Empty[r1] and Empty[r2]</li>
+</ul>
+<blockquote>
+<p>Since the $\epsilon$ will be eliminated at last, we should define (?) too.</p>
+</blockquote>
+<ul>
+<li>Empty[r1?] = true</li>
+</ul>
+<p>For this case, the Empty set is {false, true, false, false, false, false, false, false, false, false}</p>
+<p>Next, we concern about the sets of possible leafs it may touch first after we go downstair to this node. And we need to know its children to help us find it out. Thus, we may traverse the tree in postorder again. We define First[] for each node:</p>
+<ul>
+<li>First[$\epsilon$] = $\empty$</li>
+<li>First[x] = {x}</li>
+<li>First[r1*] = First[r1]</li>
+<li>First[r1?] = First[r1]</li>
+<li>First[r1|r2] = First[r1] $\cup$ First[r2]</li>
+<li>First[r1$\cdot$r2] = First[r1] $\cup$ First[r2]	(if Empty[r1] = true)</li>
+<li>First[r1$\cdot$r2] = First[r1]			(if Empty[r1] = false)</li>
+</ul>
+<p>The First set of given tree is {{5,7},{7},{5},{7},{5},{9,10},{7},{8},{9},{10}}</p>
+<p>Finally, the possible leafs it may reach after traversing current subtree. For the root, there is nothing more left, just $\empty$. For other part, it depends on context. In general, passing the information top-down. Remember we are actually leaving this subtree? We are moving upwards till we reach another subproccess which has a non-empty First set. This information should be passed down, so this is a preorder traversing. We use Next[] to denote.</p>
+<blockquote>
+<p>To discuss $\epsilon$ would just be pointless, this is a top-down traversing.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>r</th>
+<th>Equlaities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r1*</td>
+<td>Next[r1] = First[r1] $\cup$ Next[r]</td>
+</tr>
+<tr>
+<td>r1?</td>
+<td>Next[r1] = Next[r]</td>
+</tr>
+<tr>
+<td>r1|r2</td>
+<td>Next[r1] = Next[r]<!-- raw HTML omitted -->Next[r2] = Next[r]</td>
+</tr>
+<tr>
+<td>r1$\cdot$r2</td>
+<td>Next[r1] = First[r2] $\cup$ Next[r] if Empty[r2] = true<!-- raw HTML omitted -->         = First[r2]           if Empty[r2] = false<!-- raw HTML omitted -->Next[r2] = Next[r]</td>
+</tr>
+</tbody>
+</table>
+<p>And the Next set of this case is {$\empty$, {5}, $\empty$, {5,7}, {9,10}, $\empty$, {8}, {5,7}, $\empty$, $\empty$}</p>
+<p>And let&rsquo;s combine these steps together. All the states we need include an entry point, which is the root, and all the leafs except $\epsilon$. The automaton consists of:</p>
+<blockquote>
+<p>Last[root] conatains all the leafs that has an empty Next.</p>
+</blockquote>
+<ul>
+<li>States: {root} $\cup$ {leafs}/{$\epsilon$}</li>
+<li>Initial State: {root}</li>
+<li>Final States: Last[root]           if empty[root] = false
+{root} $\cup$ Last[root]  otherwise</li>
+<li>Transition: For leaf nodes in First[root], reserve the transition between them. For other leaf nodes, reserve the transition between them and their neighbors obtained in Next.</li>
+</ul>
+<p>In this case, the transitions are (1, b, 5), (1, a, 7), (5, a, 9), (5, b, 10), (7, b, 8), (8, b, 5), (8, a, 7). The final states is {9, 10}.</p>
+
+
+<center>
+<img src="https://blog.chronicat.xyz/lexical_analysis/lexical_analysis_5.png" style="zoom: 50%;" />
+</center>
+
+
+<p>And finally, we will use this methods to convert <code>l(mao|ol)</code> and show the difference.</p>
+
+
+<center>
+<img src="https://blog.chronicat.xyz/lexical_analysis/lexical_analysis_6.png" style="zoom:50%;" />
+</center>
+
+
+<p>There are no more unnecessary states here, that is a significant progress.</p>
+<h2 id="brzozowski-derivatives">Brzozowski Derivatives</h2>
+<p>So, what on earth is <strong>Brozozowski Derivative</strong> and how does this concept connect to the algorithm mentioned above?</p>
+<p>Brozozowski Derivation is defined as $u^{-1}S$ of a set $S$ of strings and string $u$, which is the set of all strings obtainable from a string in $S$ by simply cutting off the prefix $u$. Formally speaking:</p>
+<p>$u^{-1}S:=\{v\in \sum^*| uv\in S\}$. $\sum$ is the alphabet and $\sum^*$ is its kleene closure.</p>
+<p>A language $L$ is called nullable if it contains empty string $\epsilon \in L$. Each language $S$ is uniquely determined by nullability of its derivatives $w \in S$ iff $\epsilon \in w^{-1}S$.</p>
+<p>A language can be viewed as a boolean-labelled tree and for each possible string $w\in \sum^*$, when $w \in S$ then the label is true, otherwise, it&rsquo;s false. From this perspective, the derivative with respect to a symbol $a$ corresponds to computing the remaining subtree obtained by following the edge of $a$ pointing to its successors. By doing so, we decompose the tree into the root and $a^{-1}S$, the following equality. Formally, we get an equation: $S=({\epsilon}\cap S)\cup \bigcup_{a\in\sum} a (a^{-1}S)$.</p>
+<p>And remember how we define the algorithm above? We first want to know whether empty string is valid for the given tree. then we look at ($\cdot$), and say it divide the tree into subtrees. (|) is nothing but union. First[] denotes the possible $a$s and Next[] is the reference to remaining $a^{-1}S$.</p>
+<p><strong>The Berry-Sethi Algorithm builds a bridge from Brzozowski derivative&rsquo;s view of regular languge to the Glushkov Automaton.</strong></p>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+  
+</section>
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chronicat-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,
+      {
+        delimiters: [
+          {left: '$$', right: '$$', display:true},
+          {left: '$', right: '$', display:false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      }
+    );"></script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>But the sea and the shore will remain forever.</p>
+      
+      
+        ©
+        
+        2021
+         ChroniCat 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+        
+        <script src="https://blog.chronicat.xyz/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+      
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Series on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/series/</link>
+    <description>Recent content in Series on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 19 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/series/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>lexer</title>
+      <link>https://blog.chronicat.xyz/series/lexer/</link>
+      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/series/lexer/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>combinatorics</title>
+      <link>https://blog.chronicat.xyz/series/combinatorics/</link>
+      <pubDate>Mon, 14 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/series/combinatorics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>math</title>
+      <link>https://blog.chronicat.xyz/series/math/</link>
+      <pubDate>Mon, 14 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/series/math/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Haskell</title>
+      <link>https://blog.chronicat.xyz/series/haskell/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/series/haskell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>paradigm</title>
+      <link>https://blog.chronicat.xyz/series/paradigm/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/series/paradigm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://blog.chronicat.xyz/series/programming/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/series/programming/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

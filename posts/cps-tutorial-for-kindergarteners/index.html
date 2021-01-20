@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="en">
+
+    <meta name="author" content="ChroniCat">
+    <meta name="description" content="&ldquo;It was a detour that was our shortest path&rdquo;
+——Julius·Caesar·Zeppeli
+ Continuation Edgar Dijkstra once serverely critisized the excessive use of goto statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without goto? Well, your software teacher might have told you that, by structured program theorem, the goto statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of sequence ,  selection/choice, and repetition/iteration despite the fact that code duplication and additional variables may need to be introduced.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CPS Tutorial For Kindergarteners"/>
+<meta name="twitter:description" content="&ldquo;It was a detour that was our shortest path&rdquo;
+——Julius·Caesar·Zeppeli
+ Continuation Edgar Dijkstra once serverely critisized the excessive use of goto statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without goto? Well, your software teacher might have told you that, by structured program theorem, the goto statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of sequence ,  selection/choice, and repetition/iteration despite the fact that code duplication and additional variables may need to be introduced."/>
+
+    <meta property="og:title" content="CPS Tutorial For Kindergarteners" />
+<meta property="og:description" content="&ldquo;It was a detour that was our shortest path&rdquo;
+——Julius·Caesar·Zeppeli
+ Continuation Edgar Dijkstra once serverely critisized the excessive use of goto statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without goto? Well, your software teacher might have told you that, by structured program theorem, the goto statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of sequence ,  selection/choice, and repetition/iteration despite the fact that code duplication and additional variables may need to be introduced." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/" />
+<meta property="article:published_time" content="2020-04-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-04-01T00:00:00+00:00" />
+
+
+
+
+
+    <title>
+  CPS Tutorial For Kindergarteners · Epistemophilia
+</title>
+
+    
+      <link rel="canonical" href="https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/">
+    
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css"
+      integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8/normalize.min.css">
+    
+      
+      
+      <link rel="stylesheet" href="https://blog.chronicat.xyz/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.80.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://blog.chronicat.xyz/">
+      Epistemophilia
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/posts/">Blogs</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/contact/">Contact me</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://blog.chronicat.xyz/cn/">Chinese</a>
+              </li>
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">CPS Tutorial For Kindergarteners</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2020-04-01T00:00:00Z'>
+                April 1, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              16-minute read
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <blockquote>
+<p>&ldquo;It was a detour that was our shortest path&rdquo;</p>
+<p>——<em>Julius·Caesar·Zeppeli</em></p>
+</blockquote>
+<h1 id="continuation">Continuation</h1>
+<p>Edgar Dijkstra once serverely critisized the excessive use of <code>goto</code> statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without <code>goto</code>? Well, your software teacher might have told you that, by  <strong>structured program theorem</strong>, the <code>goto</code> statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of <code>sequence</code> , <code> selection/choice</code>, and <code>repetition/iteration</code> despite the fact that code duplication and additional variables may need to be introduced.</p>
+<p>Well, you teachers are telling the truth, but what he/she might not say is that the <code>goto</code> statement is not the only choice for jump statement and by jump statement I mean the ability to run programming non-linearly, which may sound a little surprising to those who are new to this. And, of course, as you can see it in the title this is a tutorial of CPS, and I am gonna introduce continuation, which is absolutely a substitute for that.</p>
+<p>By continuation, we simply means a data structure that represents <strong>the computational process at a given point in the process&rsquo;s execution</strong>. That may sound a little bit abstract, but don&rsquo;t worry, I will illustrate this with a example.</p>
+<p>Suppose you are going to evaluate boolean expression, you may have the expression looks like this:</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Expr</span> = <span style="color:#fff;font-weight:bold">Val</span> <span style="color:#fff;font-weight:bold">Bool</span> | <span style="color:#fff;font-weight:bold">Not</span> <span style="color:#fff;font-weight:bold">Expr</span> | <span style="color:#fff;font-weight:bold">And</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Expr</span> | <span style="color:#fff;font-weight:bold">Or</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Expr</span>
+
+eval :: <span style="color:#fff;font-weight:bold">Expr</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+eval (<span style="color:#fff;font-weight:bold">Val</span> b) = b
+eval (<span style="color:#fff;font-weight:bold">Not</span> x) = not (eval x)
+eval (<span style="color:#fff;font-weight:bold">And</span> x y) = (eval x) &amp;&amp; (eval y)
+eval (<span style="color:#fff;font-weight:bold">Or</span> x y) = (eval x) || (eval y)
+</code></pre></div><p>There is nothing to say about <code>Not</code> and since <code>And</code> and <code>Or</code> are the same, just take the <code>And</code> as the example.</p>
+<p>While evaluating <code>Add x y</code> you actually are evaluating<code>(eval x) &amp;&amp; (eval y)</code>,which means you first do <code>eval x </code> then do <code>&amp;&amp; (eval y)</code>. And  <code>&amp;&amp; (eval y)</code> is the so-called continuation, which, literally speaking, is the computation you are going to do next (after <code>eval x</code>).</p>
+<p>My trick to understand this is to view a continuation as a function with a hole that awaits the result from its frontier. In this case, you can image that continuation is <code>(\u -&gt; u &amp;&amp; (eval y))</code> where <code>u = eval x</code> is the hole.</p>
+<h1 id="continuation-passing-style">Continuation-Passing Style</h1>
+<p>Some may still be confused by why continuation is needed, that will not be a problem after you fully grab the core of CPS, AKA Continuation-Passing Style. Let&rsquo;s back to the example above. So here is the <code>Add x y</code> , you will <code>eval x</code> first and leave alone <code>&amp;&amp; (eval y)</code> . What we are going to do is to explicitly show how the control flows within the calculation. We added a function as a parameter of our new <code>eval'</code> which simply means the next operation we are going to do on the result of <code>eval</code>.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">--eval to eval&#39;</span>
+eval&#39; :: <span style="color:#fff;font-weight:bold">Expr</span> -&gt; (<span style="color:#fff;font-weight:bold">Bool</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span>) -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+eval&#39; x k = k (eval x)
+</code></pre></div><p>And reversely, it&rsquo;s not hard to find when <code>k = id</code>  we will destruct <code>eval'</code> to <code>eval</code>by neglecting all the computation behind.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">--eval&#39; to eval</span>
+eval = eval&#39; id
+</code></pre></div><p>Yes, we&rsquo;ve managed to prove the isomorphism between <code>eval</code> and <code>eval'</code> , however, that&rsquo;s not enough. What we actually want is to rewrite the whole definition of <code>eval'</code> just using <code>eval'</code> and lambda calculus.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">eval&#39; (<span style="color:#fff;font-weight:bold">Val</span> b) c = c b
+eval&#39; (<span style="color:#fff;font-weight:bold">Not</span> x) c = eval&#39; x c.not
+<span style="color:#007f7f">-- eval&#39; (And x y) c = eval&#39; x (\u -&gt; c (u &amp;&amp; (eval y)))</span>
+<span style="color:#007f7f">-- where u:bool = eval x:Expr</span>
+eval&#39; (<span style="color:#fff;font-weight:bold">And</span> x y) c = eval&#39; x (\u -&gt; eval&#39; y (\v -&gt; c (u &amp;&amp; v)))
+<span style="color:#007f7f">-- where u:bool = eval x:Expr and v:bool = eval y:Expr</span>
+<span style="color:#007f7f">-- similarly</span>
+eval&#39; (<span style="color:#fff;font-weight:bold">Or</span> x y) c = eval&#39; x (\u -&gt; eval&#39; y (\v -&gt; c (u || v)))
+</code></pre></div><p>That&rsquo;s pretty good because we now can keep the process of the recursion explicit while doing evaluation. Before we continue, we may want to eliminate the annoying lambda and make it first-order. For those who&rsquo;re new to this concept, first-order means there will be no more higher-order function. That will lead to a technique called defunctionaliation. The concrete methods is not our concern at present. I will just give out the result.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Cont</span> = <span style="color:#fff;font-weight:bold">STOP</span> | <span style="color:#fff;font-weight:bold">EVAL_A</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Cont</span> | <span style="color:#fff;font-weight:bold">EVAL_O</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Cont</span> |
+						<span style="color:#fff;font-weight:bold">NOT</span> <span style="color:#fff;font-weight:bold">Cont</span> | <span style="color:#fff;font-weight:bold">AND</span> <span style="color:#fff;font-weight:bold">Bool</span> <span style="color:#fff;font-weight:bold">Cont</span> | <span style="color:#fff;font-weight:bold">OR</span> <span style="color:#fff;font-weight:bold">Bool</span> <span style="color:#fff;font-weight:bold">Cont</span>
+<span style="color:#007f7f">-- Expr = Val Bool | Not Expr | And Expr Expr | Or Expr Expr</span>
+eval&#39;&#39; :: <span style="color:#fff;font-weight:bold">Expr</span> -&gt; <span style="color:#fff;font-weight:bold">Cont</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+<span style="color:#007f7f">-- eval will transform expression into continuation</span>
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Val</span> b) c = exec c b
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Not</span> x) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">NOT</span> c)
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">And</span> x y) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">EVAL_A</span> y c)
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Or</span> x y) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">EVAL_O</span> y c)
+
+exec :: <span style="color:#fff;font-weight:bold">Cont</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+<span style="color:#007f7f">-- exec will using the value to fill the hole in current continuation if there is only one and ask for next continuation. Otherwise, it will call eval to get the value of other holes.</span>
+exec <span style="color:#fff;font-weight:bold">STOP</span> b = b
+exec (<span style="color:#fff;font-weight:bold">NOT</span> c) b = exec c (not b)
+exec (<span style="color:#fff;font-weight:bold">EVAL_A</span> x c) b = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">AND</span> b c)
+exec (<span style="color:#fff;font-weight:bold">EVAL_O</span> x c) b = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">OR</span> b c)
+exec (<span style="color:#fff;font-weight:bold">AND</span> a c) b = exec c (a &amp;&amp; b)
+exec (<span style="color:#fff;font-weight:bold">OR</span> a c) b = exec c (a || b)
+
+run e = eval&#39;&#39; e <span style="color:#fff;font-weight:bold">STOP</span>
+</code></pre></div><p>And after all, we&rsquo;ve got the abstract represent of a machine that calculate any boolean expression composed by &lt;<code>and</code> , <code>or</code> , <code>not</code>&gt; and you are 100% sure this program will halt. You may find, well, in consequence, the Cont stores the function that&rsquo;s going to be calculate next and since it&rsquo;s a LIFO structure it works just like a control stack——while we do eval we actually push functions into the control stack and exec is the opposite —— we pop the control stack and apply what we&rsquo;ve poped to the current result. You can see, it&rsquo;s the <strong>Pushdown Automata</strong>.</p>
+<p>If you&rsquo;ve never heard of Pushdown Automata, don&rsquo;t worry. Since this tutorial is written for the kindergarteners, if you can&rsquo;t find the relationship between this whole banch of things and <code>goto</code> statement, I am going to show you how the thing goes.</p>
+<p>As we dig deep into the very essence of <code>goto</code> statement, it is obvious <code>goto</code> is nothing but branch. I mean, by <code>goto</code> you actually jump to another instruction instead of the one that follows. In a CFG (Control Flow Graph), you may replace any <code>goto</code> with the arrows pointing to another BB (Basic Block) instead of the one right beneath. Well, we could make it by escape continuation mechanism. Again, I will use the evalutaion of boolean expression as my example. Let&rsquo;s add an error handler Throw / Catch.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Expr</span> = <span style="color:#fff;font-weight:bold">Val</span> <span style="color:#fff;font-weight:bold">Bool</span> | <span style="color:#fff;font-weight:bold">Not</span> <span style="color:#fff;font-weight:bold">Expr</span> | <span style="color:#fff;font-weight:bold">And</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Expr</span> | <span style="color:#fff;font-weight:bold">Or</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Expr</span> |
+						<span style="color:#fff;font-weight:bold">Throw</span> | <span style="color:#fff;font-weight:bold">Catch</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Expr</span>
+<span style="color:#fff;font-weight:bold">data</span> <span style="color:#fff;font-weight:bold">Cont</span> = <span style="color:#fff;font-weight:bold">STOP</span> | <span style="color:#fff;font-weight:bold">EVAL_A</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Cont</span> | <span style="color:#fff;font-weight:bold">EVAL_O</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Cont</span> |
+						<span style="color:#fff;font-weight:bold">NOT</span> <span style="color:#fff;font-weight:bold">Cont</span> | <span style="color:#fff;font-weight:bold">AND</span> <span style="color:#fff;font-weight:bold">Bool</span> <span style="color:#fff;font-weight:bold">Cont</span> | <span style="color:#fff;font-weight:bold">OR</span> <span style="color:#fff;font-weight:bold">Bool</span> <span style="color:#fff;font-weight:bold">Cont</span> |
+						<span style="color:#fff;font-weight:bold">HAND</span> <span style="color:#fff;font-weight:bold">Expr</span> <span style="color:#fff;font-weight:bold">Cont</span>
+
+eval&#39;&#39; :: <span style="color:#fff;font-weight:bold">Expr</span> -&gt; <span style="color:#fff;font-weight:bold">Cont</span> -&gt; <span style="color:#fff;font-weight:bold">Maybe</span> <span style="color:#fff;font-weight:bold">Bool</span>
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Val</span> b) c = exec c b
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Not</span> x) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">NOT</span> c)
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">And</span> x y) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">EVAL_A</span> y c)
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Or</span> x y) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">EVAL_O</span> y c)
+eval&#39;&#39; <span style="color:#fff;font-weight:bold">Throw</span> c = unwind c
+eval&#39;&#39; (<span style="color:#fff;font-weight:bold">Catch</span> x y) c = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">HAND</span> y c)
+
+exec :: <span style="color:#fff;font-weight:bold">Cont</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span> -&gt; <span style="color:#fff;font-weight:bold">Maybe</span> <span style="color:#fff;font-weight:bold">Bool</span>
+<span style="color:#007f7f">-- execute the control stack.</span>
+exec <span style="color:#fff;font-weight:bold">STOP</span> b = <span style="color:#fff;font-weight:bold">Just</span> b
+exec (<span style="color:#fff;font-weight:bold">NOT</span> c) b = exec c (not b)
+exec (<span style="color:#fff;font-weight:bold">EVAL_A</span> x c) b = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">AND</span> b c)
+exec (<span style="color:#fff;font-weight:bold">EVAL_O</span> x c) b = eval&#39;&#39; x (<span style="color:#fff;font-weight:bold">OR</span> b c)
+exec (<span style="color:#fff;font-weight:bold">AND</span> a c) b = exec c (a &amp;&amp; b)
+exec (<span style="color:#fff;font-weight:bold">OR</span> a c) b = exec c (a || b)
+exec (<span style="color:#fff;font-weight:bold">HAND</span> <span style="color:#fff;font-weight:bold">_</span> c) b = exec c b
+
+unwind :: <span style="color:#fff;font-weight:bold">Cont</span> -&gt; <span style="color:#fff;font-weight:bold">Maybe</span> <span style="color:#fff;font-weight:bold">Bool</span>
+<span style="color:#007f7f">-- unwind the control stack until c = HAND Expr Cont</span>
+unwind <span style="color:#fff;font-weight:bold">STOP</span> = <span style="color:#fff;font-weight:bold">Nothing</span>
+unwind (<span style="color:#fff;font-weight:bold">HAND</span> x c) = eval&#39;&#39; x c
+unwind (<span style="color:#fff;font-weight:bold">EVAL_A</span> <span style="color:#fff;font-weight:bold">_</span> c) = unwind c
+unwind (<span style="color:#fff;font-weight:bold">EVAL_O</span> <span style="color:#fff;font-weight:bold">_</span> c) = unwind c
+unwind (<span style="color:#fff;font-weight:bold">NOT</span> c) = unwind c
+unwind (<span style="color:#fff;font-weight:bold">AND</span> <span style="color:#fff;font-weight:bold">_</span> c) = unwind c
+unwind (<span style="color:#fff;font-weight:bold">OR</span> <span style="color:#fff;font-weight:bold">_</span> c) = unwind c
+
+run e = eval&#39;&#39; e <span style="color:#fff;font-weight:bold">STOP</span>
+</code></pre></div><p>As you can see, when there is a <code>Throw</code> appears in the expression, the <code>eval''</code> will call <code>unwind</code> to unwind the control stack until it meets <code>Hand</code>, otherwise it may escape from this program and ends in <code>Nothing</code>. The <code>Catch</code> will return the result of its first argument until one of it&rsquo;s argument are <code>Throw</code> which will make it return the value which is not empty. In other words, <code>Catch</code> catches the <code>throw</code> . By <code>Catch</code> and <code>Throw</code> , we managed to make a jump —— the <code>Throw</code>  abort the computation between itself and <code>Catch</code>, here <code>Throw</code> works similarly as <code>goto</code> where catch is.</p>
+<p>Sometimes, we&rsquo;d like to combine <code>Catch</code> and<code>Throw</code> together, and here we do have such a function called <code>callCC</code> , AKA call-with-Current-Continuation. For those who have learned some lisp that will not be unfamiliar. In Haskell, <code>callCC</code> is a little bit different from that in a dynamic typed language like scheme, but you can still think that <code>callCC</code> means applying the current continuation to the value and return the result directly, neglecting all the operation behind. And in most of times <code>callCC</code> has nothing different from the <code>return</code> except that it will ask you to write down the continuation explicitly.</p>
+<h1 id="mother-of-all-monads">Mother of all Monads</h1>
+<p>Now, let&rsquo;s just step back to the original defination of the continuation since we want to generalize the conclusion.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- Cont r a = (\k -&gt; k u) apply function k:a -&gt; r to a given u:a.</span>
+<span style="color:#fff;font-weight:bold">newtype</span> <span style="color:#fff;font-weight:bold">Cont</span> r a = {runCont :: (a -&gt; r) -&gt; r}
+</code></pre></div><p>As we all know, in mathematics, a <strong>monad</strong> is nothing but a category with an endofunctor $T$ and two natrual transformations $\eta : I_x\rightarrow T$ and $\mu : T^2\rightarrow T$. Appearently the CPS is a monad.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Functor</span> (<span style="color:#fff;font-weight:bold">Cont</span> r) <span style="color:#fff;font-weight:bold">where</span>
+<span style="color:#007f7f">-- Functor</span>
+fmap f m = <span style="color:#fff;font-weight:bold">Cont</span> $ \c -&gt; runCont m (c . f)
+
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Monad</span> (<span style="color:#fff;font-weight:bold">Cont</span> r) <span style="color:#fff;font-weight:bold">where</span> 
+<span style="color:#007f7f">-- eta</span>
+return a = <span style="color:#fff;font-weight:bold">Cont</span> $ \c -&gt; c a
+<span style="color:#007f7f">-- mu or bind</span>
+m &gt;&gt;= k = <span style="color:#fff;font-weight:bold">Cont</span> $ \c -&gt; runCont m (\s -&gt; runCont (k s) c)
+</code></pre></div><p>A quick prove on its property:</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">{-- left identity : return a &gt;&gt;= k = k a
+</span><span style="color:#007f7f">  return a &gt;&gt;= k
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont (return a) (\s -&gt; runCont (k s) c)
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont (Cont $ (\c -&gt; c a)) (\s -&gt; runCont (k s) c)
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont (k a) c
+</span><span style="color:#007f7f">= k a
+</span><span style="color:#007f7f">--}</span>
+<span style="color:#007f7f">{-- right identity : m &gt;&gt;= return = m
+</span><span style="color:#007f7f">  m &gt;&gt;= return
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m (\s -&gt; runCont (return s) c)
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m (\s -&gt; (runCont (Cont $ \c -&gt; c s) c))
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m (\s -&gt; c s)
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m c
+</span><span style="color:#007f7f">= m
+</span><span style="color:#007f7f">--}</span>
+<span style="color:#007f7f">{-- associative law : m &gt;&gt;= (\x -&gt; k x &gt;&gt;= h) = (m &gt;&gt;= k) &gt;&gt;= h
+</span><span style="color:#007f7f">  m &gt;&gt;= (\x -&gt; k x &gt;&gt;= h)
+</span><span style="color:#007f7f">= m &gt;&gt;= (\x -&gt; Cont (\c -&gt; runCont (k x) (\s -&gt; runCont (h s) c)))
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m (\s -&gt; runCont ((\x -&gt; Cont (\c -&gt; runCont (k x) (\s -&gt; runCont (h s) c))) s) c)
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m (\s -&gt; runCont (Cont (\c -&gt; runCont (k s) (\s -&gt; runCont (h s) c))) c)
+</span><span style="color:#007f7f">= Cont $ \c -&gt; runCont m (\s -&gt; runCont (k s) (\s -&gt; runCont (h s) c))
+</span><span style="color:#007f7f">= runCont (Cont $ \c -&gt; runCont m (\s -&gt; runCont (k s) c)) (\s -&gt; runCont (h s) c)
+</span><span style="color:#007f7f">= (m &gt;&gt;= k) &gt;&gt;= h
+</span><span style="color:#007f7f">--}</span>
+</code></pre></div><p>We proved that <code>Cont r a</code> in fact preserve a monoid structure in the category of its endofunctor, more precisely, we proved the existence of left identity and right identity, in this case it&rsquo;s <code>return</code>, and the associative law. That&rsquo;s good, but what is the point of fingering out the mathematic structure of CPS, you may ask. Sometimes we may assume that a good mathematics structure of the data structure can help us to do optimizing on the programs, though I have to admit that to think that it is the mathematics struture of CPS rather that the monoid, which happens to be the right structure, that matters is also acceptable. Anyway, let&rsquo;s keep this in mind that continutaion has a certain structure called monad.</p>
+<p>So next time, when you see another data type which also have a monad in it, you can point it out that, in fact, it has the same structure that continuation has. As my title said is the mother of monad, there must be some deeper connection between them and, yes, you may assmue that any data type with monad structure can be optimized by the technique of tail-call optimization or others. But that will not be the topic today. Let&rsquo;s jump to the question of how to construct any data type with Monad using continuation.</p>
+<p>I am still going to use Maybe Bool as my example.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">expr1 = <span style="color:#fff;font-weight:bold">do</span>
+  a &lt;- return <span style="color:#fff;font-weight:bold">True</span>
+  b &lt;- return <span style="color:#fff;font-weight:bold">False</span>
+  c &lt;- return <span style="color:#fff;font-weight:bold">True</span>
+  return $ not a &amp;&amp; (b || c)
+
+runCont expr1 <span style="color:#fff;font-weight:bold">Just</span> <span style="color:#007f7f">-- Just False</span>
+</code></pre></div><p>Let&rsquo;s first neglect the runCont here, you may treat it as a unwrapper. Do notation is a syntactic sugar, you can rewrite the whole thing like:</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">expr1 = return <span style="color:#fff;font-weight:bold">True</span> &gt;&gt;= (\a -&gt;
+        return <span style="color:#fff;font-weight:bold">False</span> &gt;&gt;= (\b -&gt;
+        return <span style="color:#fff;font-weight:bold">True</span> &gt;&gt;= (\c -&gt;
+        return $ not a &amp;&amp; (b || c))))
+</code></pre></div><p>At first glance, it seems that the function works perfectly well without continuation. Well, how about change it into CPS ?</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">expr2 = <span style="color:#fff;font-weight:bold">do</span>
+ a &lt;- return <span style="color:#fff;font-weight:bold">True</span>
+ b &lt;- cont (\k -&gt; k <span style="color:#fff;font-weight:bold">False</span>)
+ c &lt;- cont (\k -&gt; k <span style="color:#fff;font-weight:bold">True</span>)
+ return $ not a &amp;&amp; (b || c) 
+ 
+runCont expr2 <span style="color:#fff;font-weight:bold">Just</span> <span style="color:#007f7f">-- Just False</span>
+</code></pre></div><p>Now, we get it done. Why don&rsquo;t we just add an escape continuation?</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">run m = runCont m return
+
+expr3 = run $ <span style="color:#fff;font-weight:bold">do</span>
+  a &lt;- return <span style="color:#fff;font-weight:bold">True</span>
+  b &lt;- cont (\k -&gt; <span style="color:#fff;font-weight:bold">Nothing</span> &gt;&gt;= k)
+  c &lt;- cont (\k -&gt; k <span style="color:#fff;font-weight:bold">True</span>)
+  return $ not a &amp;&amp; (b || c) <span style="color:#007f7f">-- Nothing</span>
+</code></pre></div><p>Or using <code>callCC</code></p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">expr3 = run $ <span style="color:#fff;font-weight:bold">do</span>
+  a &lt;- return <span style="color:#fff;font-weight:bold">True</span>
+  b &lt;- callCC (\k -&gt; cont (\x -&gt; <span style="color:#fff;font-weight:bold">Nothing</span>))
+  c &lt;- cont (\k -&gt; k <span style="color:#fff;font-weight:bold">True</span>)
+  return $ not a &amp;&amp; (b || c) <span style="color:#007f7f">-- Nothing</span>
+</code></pre></div><p>And just try to embeds the Bool into list.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">expr4 = run $ <span style="color:#fff;font-weight:bold">do</span>
+  a &lt;- cont (\k -&gt; [<span style="color:#fff;font-weight:bold">True</span>] &gt;&gt;= k)
+  b &lt;- cont (\k -&gt; [<span style="color:#fff;font-weight:bold">False</span>] &gt;&gt;= k)
+  c &lt;- cont (\k -&gt; [<span style="color:#fff;font-weight:bold">True</span>, <span style="color:#fff;font-weight:bold">False</span>] &gt;&gt;= k)
+  return $ not a &amp;&amp; (b || c) <span style="color:#007f7f">-- [False, False] </span>
+</code></pre></div><p>After a skim of the implementation of Cont Monad as the utility to describe the behaviour of other monads, we could now talk about what is <strong>delimited continuation</strong> and the relationship between delimited continuation and Cont Monad.</p>
+<h1 id="delimited-continuation">Delimited Continuation</h1>
+<blockquote>
+<p><a href="http://okmij.org/ftp/continuations/#tutorial">Delimited continuations</a> are continuations whose extent is delimited. In the expression 3+[5∗2]−1, we implicitly assumed that the rest of the current expression spans whole the expression, that is, 3+[·]−1. Rather than taking whole the rest of the computation, however, we sometimes want to capture only a part of it. Such continuations are called delimited continuations.
+The extent to which the current delimited continuation spans is designated by an explicit delimiter ⟨· · ·⟩. For example, in the expression ⟨3 + [5 ∗ 2]⟩ − 1, the current delimited continuation at [5 ∗ 2] is only ⟨3 + [ · ]⟩ and does not contain − 1.</p>
+</blockquote>
+<p>Briefly speaking, a delimited continuation consists only two speical operation, <code>reset</code> and <code>shift</code> . While <code>reset</code> delimits the continuation, <code>shift</code> captures it.</p>
+<p>In detail,  <code>shift (\k -&gt; M)</code> proceeds as follows:</p>
+<ol>
+<li>The current delimited continuation is cleared.</li>
+<li>The cleared continuation is passed to <code>\k -&gt; M</code> as an argument</li>
+<li>The body M is executed.</li>
+</ol>
+<p>For instance, giving <code>reset (\ () -&gt; 3 + shift (\ _ -&gt; 5 * 2)) - 1</code> the result will be $5*2 - 1 = 9$, which discard the delimited continuation. Giving <code>reset (\ () -&gt; 3 + shift (\ k -&gt; k)) - 1</code> the result will be <code>(\ x -&gt; 3 + x - 1)</code> , which extract the delimited continuation.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- shift f captures the continuation up to the nearest enclosing reset and passes it to f:</span>
+shift :: ((a -&gt; r) -&gt; <span style="color:#fff;font-weight:bold">Cont</span> r r) -&gt; <span style="color:#fff;font-weight:bold">Cont</span> r a
+shift f = shiftT (f . (runIdentity .))
+<span style="color:#007f7f">-- shift f = cont (evalCont . f)</span>
+<span style="color:#007f7f">--  where evalCont :: Cont r r -&gt; r</span>
+<span style="color:#007f7f">--        evalCont x = runCont x id</span>
+
+shiftT :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; ((a -&gt; m r) -&gt; <span style="color:#fff;font-weight:bold">ContT</span> r m r) -&gt; <span style="color:#fff;font-weight:bold">ContT</span> r m a
+shiftT f = <span style="color:#fff;font-weight:bold">ContT</span> (evalContT . f)
+
+reset :: <span style="color:#fff;font-weight:bold">Cont</span> r r -&gt; <span style="color:#fff;font-weight:bold">Cont</span> r&#39; r
+reset = resetT
+<span style="color:#007f7f">-- reset = lift.evalCont</span>
+<span style="color:#007f7f">--   where lift :: (Monad m) =&gt; m a -&gt; t m a      satisfies that</span>
+<span style="color:#007f7f">--         lift . return = return</span>
+<span style="color:#007f7f">--         lift (m &gt;&gt;= f) = lift m &gt;&gt;= (lift . f)</span>
+
+resetT :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; <span style="color:#fff;font-weight:bold">ContT</span> r m r -&gt; <span style="color:#fff;font-weight:bold">ContT</span> r&#39; m r
+resetT = lift . evalContT
+</code></pre></div><p>Since monad transformer are not our concern, just neglect it. The function may seems hard to understand, but to understand how the function is defined is not our priority. We want to figure out how <code>shift</code> and <code>reset</code> interact with each other.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Haskell" data-lang="Haskell"><span style="color:#007f7f">-- reset m delimits the continuation of any &#39;shift&#39; inside m.</span>
+reset (return m) = return m
+<span style="color:#007f7f">-- shift f captures the continuation up to the nearest enclosing reset and passes it to f:</span>
+reset (shift f &gt;&gt;= k) = reset (f (evalCont . k))
+</code></pre></div><p>The best way to illustrate is to give some examples:</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- liftM2 :: Monad m =&gt; (a1 -&gt; a2 -&gt; r) -&gt; m a1 -&gt; m a2 -&gt; m r</span>
+
+<span style="color:#fff;font-weight:bold">infixl</span> <span style="color:#ff0;font-weight:bold">6</span> +!
+<span style="color:#fff;font-weight:bold">infixl</span> <span style="color:#ff0;font-weight:bold">7</span> *!
+(+!),(*!) :: (<span style="color:#fff;font-weight:bold">Num</span> a, <span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; m a -&gt; m a -&gt; m a 
+(+!) = liftM2 (+)
+(*!) = liftM2 (*)
+
+runC = (flip runCont) id
+
+runC (reset (return <span style="color:#ff0;font-weight:bold">2</span> *! shift (\k -&gt; return $ k (k <span style="color:#ff0;font-weight:bold">10</span>))) +! return <span style="color:#ff0;font-weight:bold">1</span>)
+<span style="color:#007f7f">--  = return ((\k -&gt; k (k 10)) (\x -&gt; 2 * x) + 1)</span>
+<span style="color:#007f7f">--  = return (2 * (2 * 10) + 1) = return 41</span>
+runC (reset (return <span style="color:#ff0;font-weight:bold">3</span> +! shift (\k -&gt; return <span style="color:#ff0;font-weight:bold">10</span>) +! return <span style="color:#ff0;font-weight:bold">2</span>))
+<span style="color:#007f7f">--  = return 10</span>
+<span style="color:#007f7f">-- the value of shift escaped from the contents.</span>
+</code></pre></div><p>By delimited continuation we&rsquo;ve actually got a more flexible way to manipulate the control flow of the programs. And, of course, with <code>reset</code> and <code>runCont</code> you can even define a function that transform a <code>Cont r a</code> into <code>r</code> which simply means you can take the value out of the encapsulation of monad.</p>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+  
+    
+    
+    
+  
+    
+    
+    
+  
+</section>
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chronicat-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,
+      {
+        delimiters: [
+          {left: '$$', right: '$$', display:true},
+          {left: '$', right: '$', display:false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      }
+    );"></script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>But the sea and the shore will remain forever.</p>
+      
+      
+        ©
+        
+        2021
+         ChroniCat 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+        
+        <script src="https://blog.chronicat.xyz/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+      
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

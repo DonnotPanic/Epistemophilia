@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>lexer on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/series/lexer/</link>
+    <description>Recent content in lexer on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 19 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/series/lexer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Head First Lexical Analysis(1)</title>
+      <link>https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/</link>
+      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/</guid>
+      <description>In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.
+Nowadays, a technique called Parser Combinator may blur the boundary between parsers and lexers. However, how to use a Parser Combinator efficiently still demands a good knowledge of lexers. Besides, a Parser Combinator is LL(k), that means you have to manually eliminate left recursion.</description>
+    </item>
+    
+  </channel>
+</rss>

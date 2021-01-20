@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Haskell on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/series/haskell/</link>
+    <description>Recent content in Haskell on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 01 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/series/haskell/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CPS Tutorial For Kindergarteners</title>
+      <link>https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/</guid>
+      <description>&amp;ldquo;It was a detour that was our shortest path&amp;rdquo;
+——Julius·Caesar·Zeppeli
+ Continuation Edgar Dijkstra once serverely critisized the excessive use of goto statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without goto? Well, your software teacher might have told you that, by structured program theorem, the goto statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of sequence ,  selection/choice, and repetition/iteration despite the fact that code duplication and additional variables may need to be introduced.</description>
+    </item>
+    
+  </channel>
+</rss>

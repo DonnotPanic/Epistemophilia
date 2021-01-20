@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/posts/</link>
+    <description>Recent content in Posts on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 19 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Head First Lexical Analysis(1)</title>
+      <link>https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/</link>
+      <pubDate>Tue, 19 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/posts/head-first-lexical-analysis1/</guid>
+      <description>In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.
+Nowadays, a technique called Parser Combinator may blur the boundary between parsers and lexers. However, how to use a Parser Combinator efficiently still demands a good knowledge of lexers. Besides, a Parser Combinator is LL(k), that means you have to manually eliminate left recursion.</description>
+    </item>
+    
+    <item>
+      <title>Notes on Generating Functions and Character Polynomial</title>
+      <link>https://blog.chronicat.xyz/posts/notes-on-generating-functions-and-character-polynomial/</link>
+      <pubDate>Mon, 14 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/posts/notes-on-generating-functions-and-character-polynomial/</guid>
+      <description>Notes on Generating Functions and Character Polynomial Generating Functions Generating Functions are formal power series that play important roles in Combinatorics. Specifically， We may assume that a generating functions should look like this:
+$$ g(x ) = u_0+u_1x+u_2x^2+\cdots + u_nx^n+\cdots. \tag{1} $$
+Suppose that there is another generating function:
+$$ f(x)=v_0+v_1x+v_2x^2+\cdots + v_nx^n+\cdots. \tag{2} $$
+It&amp;rsquo;s easy to find that we can define the multiply two generating functions the way we define convergence:</description>
+    </item>
+    
+    <item>
+      <title>CPS Tutorial For Kindergarteners</title>
+      <link>https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/posts/cps-tutorial-for-kindergarteners/</guid>
+      <description>&amp;ldquo;It was a detour that was our shortest path&amp;rdquo;
+——Julius·Caesar·Zeppeli
+ Continuation Edgar Dijkstra once serverely critisized the excessive use of goto statement in programming for that code that uses goto statements is harder to understand than alternative constructions. When I was still a freshman, I really found myself confused by that—— what can I do without goto? Well, your software teacher might have told you that, by structured program theorem, the goto statement in programs which can be expressed as flowchart can be avoided by using the combination of the three programming constructs of sequence ,  selection/choice, and repetition/iteration despite the fact that code duplication and additional variables may need to be introduced.</description>
+    </item>
+    
+  </channel>
+</rss>

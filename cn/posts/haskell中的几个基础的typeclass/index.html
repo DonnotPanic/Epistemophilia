@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Language" content="cn">
+
+    <meta name="author" content="ChroniCat">
+    <meta name="description" content="讲一些简单的东西，安利更多人打破内心的恐惧入坑 Haskell &gt; w &lt;
+首先什么是Typeclass呢，其实没必要讲的那么玄乎，那么抽象，Typeclass 无非是 type 级别的约束，所有的 Typeclass 里的 type 必须实现 Typeclass 中函数并保证满足这些函数应有的性质，可以打个比方，就是数学中所说的满足 xx 性质。但是具体来说是不是真的满足这些性质呢，实际上是我们，programmer 应该考虑的问题。有了 Typeclass 的约束，就满足了对应的性质，因而我们就可以自由的按照我们的想法去进行操作了。
+Haskell 中用 class 关键词定义 Typeclass， 而与之相对的，满足 Typeclass 约束的某个具体的类型，用 instance 关键词去实现 Typeclass中定义的函数。
+ 注：以下不会区分函数和 operator， 统一用函数表示。
+ 举一个简单的例子：
+Eq Eq Typeclass 描述了该类型上存在等价关系（自反，对称，传递） =， 同时满足Substitutivity 和 Negation：
+-- Reflexivity (x == x) = True -- Symmetry (x == y) = (y == x) -- Transitivity if ((x == y) &amp;&amp; (y == z)) = True, then (x == z) = True -- Substitutivity -- f 返回一个 Eq typeclass 约束的 instance if (x == y) = True then (f x == f y) = True -- Negation x /= y = not (x == y) Eq 的具体定义在 GHC.">
+    <meta name="keywords" content="blog,desenvolvedor,pessoal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Haskell中的几个基础的Typeclass"/>
+<meta name="twitter:description" content="讲一些简单的东西，安利更多人打破内心的恐惧入坑 Haskell &gt; w &lt;
+首先什么是Typeclass呢，其实没必要讲的那么玄乎，那么抽象，Typeclass 无非是 type 级别的约束，所有的 Typeclass 里的 type 必须实现 Typeclass 中函数并保证满足这些函数应有的性质，可以打个比方，就是数学中所说的满足 xx 性质。但是具体来说是不是真的满足这些性质呢，实际上是我们，programmer 应该考虑的问题。有了 Typeclass 的约束，就满足了对应的性质，因而我们就可以自由的按照我们的想法去进行操作了。
+Haskell 中用 class 关键词定义 Typeclass， 而与之相对的，满足 Typeclass 约束的某个具体的类型，用 instance 关键词去实现 Typeclass中定义的函数。
+ 注：以下不会区分函数和 operator， 统一用函数表示。
+ 举一个简单的例子：
+Eq Eq Typeclass 描述了该类型上存在等价关系（自反，对称，传递） =， 同时满足Substitutivity 和 Negation：
+-- Reflexivity (x == x) = True -- Symmetry (x == y) = (y == x) -- Transitivity if ((x == y) &amp;&amp; (y == z)) = True, then (x == z) = True -- Substitutivity -- f 返回一个 Eq typeclass 约束的 instance if (x == y) = True then (f x == f y) = True -- Negation x /= y = not (x == y) Eq 的具体定义在 GHC."/>
+
+    <meta property="og:title" content="Haskell中的几个基础的Typeclass" />
+<meta property="og:description" content="讲一些简单的东西，安利更多人打破内心的恐惧入坑 Haskell &gt; w &lt;
+首先什么是Typeclass呢，其实没必要讲的那么玄乎，那么抽象，Typeclass 无非是 type 级别的约束，所有的 Typeclass 里的 type 必须实现 Typeclass 中函数并保证满足这些函数应有的性质，可以打个比方，就是数学中所说的满足 xx 性质。但是具体来说是不是真的满足这些性质呢，实际上是我们，programmer 应该考虑的问题。有了 Typeclass 的约束，就满足了对应的性质，因而我们就可以自由的按照我们的想法去进行操作了。
+Haskell 中用 class 关键词定义 Typeclass， 而与之相对的，满足 Typeclass 约束的某个具体的类型，用 instance 关键词去实现 Typeclass中定义的函数。
+ 注：以下不会区分函数和 operator， 统一用函数表示。
+ 举一个简单的例子：
+Eq Eq Typeclass 描述了该类型上存在等价关系（自反，对称，传递） =， 同时满足Substitutivity 和 Negation：
+-- Reflexivity (x == x) = True -- Symmetry (x == y) = (y == x) -- Transitivity if ((x == y) &amp;&amp; (y == z)) = True, then (x == z) = True -- Substitutivity -- f 返回一个 Eq typeclass 约束的 instance if (x == y) = True then (f x == f y) = True -- Negation x /= y = not (x == y) Eq 的具体定义在 GHC." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/" />
+<meta property="article:published_time" content="2020-06-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-06-12T00:00:00+00:00" /><meta property="og:site_name" content="Epistemophilia" /><meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/ski-%E7%BB%84%E5%90%88%E5%AD%90/" /><meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/" />
+<meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/" /><meta property="og:see_also" content="https://blog.chronicat.xyz/cn/posts/ntt/" />
+
+
+
+    <title>
+  Haskell中的几个基础的Typeclass · Epistemophilia
+</title>
+
+    
+      <link rel="canonical" href="https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/">
+    
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css"
+      integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8/normalize.min.css">
+    
+      
+      
+      <link rel="stylesheet" href="https://blog.chronicat.xyz/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://blog.chronicat.xyz/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://blog.chronicat.xyz/images/apple-touch-icon.png">
+
+    
+
+    <meta name="generator" content="Hugo 0.80.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light"
+        onload=""
+  >
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://blog.chronicat.xyz/cn">
+      Epistemophilia
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/about/">关于</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/posts/">博客</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/projects/">项目</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="https://blog.chronicat.xyz/cn/contact/">联系方式</a>
+            </li>
+          
+        
+        
+          
+          
+          
+            
+              
+                <li class="navigation-item menu-separator">
+                  <span>|</span>
+                </li>
+                
+              
+              <li class="navigation-item">
+                <a href="https://blog.chronicat.xyz/">English</a>
+              </li>
+            
+          
+            
+          
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Haskell中的几个基础的Typeclass</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime='2020-06-12T00:00:00Z'>
+                June 12, 2020
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              10-minute read
+            </span>
+          </div>
+          
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <p>讲一些简单的东西，安利更多人打破内心的恐惧入坑 Haskell &gt; w &lt;</p>
+<p>首先什么是Typeclass呢，其实没必要讲的那么玄乎，那么抽象，Typeclass 无非是 type 级别的约束，所有的 Typeclass 里的 type 必须实现 Typeclass 中函数并保证满足这些函数应有的性质，可以打个比方，就是数学中所说的满足 xx 性质。但是具体来说是不是真的满足这些性质呢，实际上是我们，programmer 应该考虑的问题。有了 Typeclass 的约束，就满足了对应的性质，因而我们就可以自由的按照我们的想法去进行操作了。</p>
+<p>Haskell 中用 <code>class</code> 关键词定义 Typeclass， 而与之相对的，满足 Typeclass 约束的某个具体的类型，用 <code>instance</code> 关键词去实现 Typeclass中定义的函数。</p>
+<blockquote>
+<p>注：以下不会区分函数和 operator， 统一用函数表示。</p>
+</blockquote>
+<p>举一个简单的例子：</p>
+<h2 id="eq">Eq</h2>
+<p><code>Eq</code> Typeclass 描述了该类型上存在等价关系（自反，对称，传递） <code>=</code>， 同时满足<strong>Substitutivity</strong> 和 <strong>Negation</strong>：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- Reflexivity</span>
+(x == x) = <span style="color:#fff;font-weight:bold">True</span>
+<span style="color:#007f7f">-- Symmetry</span>
+(x == y) = (y == x)
+<span style="color:#007f7f">-- Transitivity</span>
+<span style="color:#fff;font-weight:bold">if</span> ((x == y) &amp;&amp; (y == z)) = <span style="color:#fff;font-weight:bold">True</span>, <span style="color:#fff;font-weight:bold">then</span> (x == z) = <span style="color:#fff;font-weight:bold">True</span>
+<span style="color:#007f7f">-- Substitutivity</span>
+<span style="color:#007f7f">-- f 返回一个 Eq typeclass 约束的 instance</span>
+<span style="color:#fff;font-weight:bold">if</span> (x == y) = <span style="color:#fff;font-weight:bold">True</span> <span style="color:#fff;font-weight:bold">then</span> (f x == f y) = <span style="color:#fff;font-weight:bold">True</span>
+<span style="color:#007f7f">-- Negation</span>
+x /= y = not (x == y)
+</code></pre></div><p>Eq 的具体定义在 GHC.Classes中</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- GHC.Classes</span>
+<span style="color:#007f7f">-- Eq a 接受一个任意的参数 a 代表实现了 Eq instance 的类型</span>
+<span style="color:#fff;font-weight:bold">class</span>  <span style="color:#fff;font-weight:bold">Eq</span> a  <span style="color:#fff;font-weight:bold">where</span>
+    (==), (/=)           :: a -&gt; a -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+    <span style="color:#007f7f">{-# INLINE (/=) #-}</span> <span style="color:#007f7f">-- 这个 pragma 是告诉编译器 (/=) 可以被 inline 优化</span>
+    <span style="color:#007f7f">{-# INLINE (==) #-}</span> <span style="color:#007f7f">-- 同上</span>
+    x /= y               = not (x == y)
+    x == y               = not (x /= y)
+    <span style="color:#007f7f">{-# MINIMAL (==) | (/=) #-}</span> 
+    <span style="color:#007f7f">-- minimal progma 描述的函数必须在 instance中定义，即需要定义 (==) 或 (/=)。</span>
+    
+<span style="color:#007f7f">-- 这里是将单一类型的 Eq instance 扩展到多元组上</span>
+<span style="color:#fff;font-weight:bold">deriving</span> <span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Eq</span> <span style="color:#fff;font-weight:bold">()</span>
+<span style="color:#fff;font-weight:bold">deriving</span> <span style="color:#fff;font-weight:bold">instance</span> (<span style="color:#fff;font-weight:bold">Eq</span>  a, <span style="color:#fff;font-weight:bold">Eq</span>  b) =&gt; <span style="color:#fff;font-weight:bold">Eq</span>  (a, b)
+<span style="color:#fff;font-weight:bold">deriving</span> <span style="color:#fff;font-weight:bold">instance</span> (<span style="color:#fff;font-weight:bold">Eq</span>  a, <span style="color:#fff;font-weight:bold">Eq</span>  b, <span style="color:#fff;font-weight:bold">Eq</span>  c) =&gt; <span style="color:#fff;font-weight:bold">Eq</span>  (a, b, c)
+<span style="color:#007f7f">-- 后面的省略了</span>
+</code></pre></div><p>可以看到 Eq instance 只是描述了 <code>(==)</code> 和 <code>(/=)</code> 两个函数，但是对于具体定义是否满足性质是不做要求的。让我们看一眼 <code>Char</code> 是怎么实现 Eq 的。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- GHC.Classes</span>
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Eq</span> <span style="color:#fff;font-weight:bold">Char</span> <span style="color:#fff;font-weight:bold">where</span>
+    (==) = eqChar
+    (/=) = neChar
+
+<span style="color:#007f7f">-- See GHC.Classes#matching_overloaded_methods_in_rules</span>
+<span style="color:#007f7f">{-# INLINE [1] eqChar #-}</span>
+<span style="color:#007f7f">{-# INLINE [1] neChar #-}</span>
+eqChar, neChar :: <span style="color:#fff;font-weight:bold">Char</span> -&gt; <span style="color:#fff;font-weight:bold">Char</span> -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+(<span style="color:#fff;font-weight:bold">C</span># x) `eqChar` (<span style="color:#fff;font-weight:bold">C</span># y) = isTrue# (x `eqChar#` y)
+(<span style="color:#fff;font-weight:bold">C</span># x) `neChar` (<span style="color:#fff;font-weight:bold">C</span># y) = isTrue# (x `neChar#` y)
+</code></pre></div><p>因为不想涉及底层，所以我们只是粗略的看看 instance 的用法。一旦我们实现了 <code>Eq Char</code>，则我们可以对 <code>Char</code> 类型进行判断相等，当我们设计任何需要 Eq 约束的类型实现的函数时，我们都可以代入 <code>Char</code>。注，Haskell 里 <code>“abc”</code> 和 <code>['a','b','c']</code> 是等价的</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">foo :: (<span style="color:#fff;font-weight:bold">Eq</span> a) =&gt; [a] -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+foo xs = foldl (&amp;&amp;) <span style="color:#fff;font-weight:bold">True</span> $ zipWith (==) xs $ reverse xs
+
+foo <span style="color:#0ff;font-weight:bold">&#34;abcdcba&#34;</span> <span style="color:#007f7f">-- True</span>
+foo <span style="color:#0ff;font-weight:bold">&#34;aac&#34;</span> <span style="color:#007f7f">-- False</span>
+</code></pre></div><h2 id="ord">Ord</h2>
+<p>详细的讲完了 Eq，相信大家对于 Haskell 里的 Typeclass，以及 <code>class</code> 和 <code>instance</code>	关键词都有所了解，那我们就快速过一遍 Ord。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- GHC.Classes</span>
+<span style="color:#fff;font-weight:bold">class</span>  (<span style="color:#fff;font-weight:bold">Eq</span> a) =&gt; <span style="color:#fff;font-weight:bold">Ord</span> a  <span style="color:#fff;font-weight:bold">where</span>
+    compare              :: a -&gt; a -&gt; <span style="color:#fff;font-weight:bold">Ordering</span>
+    (&lt;), (&lt;=), (&gt;), (&gt;=) :: a -&gt; a -&gt; <span style="color:#fff;font-weight:bold">Bool</span>
+    max, min             :: a -&gt; a -&gt; a
+
+    compare x y = <span style="color:#fff;font-weight:bold">if</span> x == y <span style="color:#fff;font-weight:bold">then</span> <span style="color:#fff;font-weight:bold">EQ</span>
+                  <span style="color:#007f7f">-- NB: must be &#39;&lt;=&#39; not &#39;&lt;&#39; to validate the</span>
+                  <span style="color:#007f7f">-- above claim about the minimal things that</span>
+                  <span style="color:#007f7f">-- can be defined for an instance of Ord:</span>
+                  <span style="color:#fff;font-weight:bold">else</span> <span style="color:#fff;font-weight:bold">if</span> x &lt;= y <span style="color:#fff;font-weight:bold">then</span> <span style="color:#fff;font-weight:bold">LT</span>
+                  <span style="color:#fff;font-weight:bold">else</span> <span style="color:#fff;font-weight:bold">GT</span>
+
+    x &lt;  y = <span style="color:#fff;font-weight:bold">case</span> compare x y <span style="color:#fff;font-weight:bold">of</span> { <span style="color:#fff;font-weight:bold">LT</span> -&gt; <span style="color:#fff;font-weight:bold">True</span>;  <span style="color:#fff;font-weight:bold">_</span> -&gt; <span style="color:#fff;font-weight:bold">False</span> }
+    x &lt;= y = <span style="color:#fff;font-weight:bold">case</span> compare x y <span style="color:#fff;font-weight:bold">of</span> { <span style="color:#fff;font-weight:bold">GT</span> -&gt; <span style="color:#fff;font-weight:bold">False</span>; <span style="color:#fff;font-weight:bold">_</span> -&gt; <span style="color:#fff;font-weight:bold">True</span> }
+    x &gt;  y = <span style="color:#fff;font-weight:bold">case</span> compare x y <span style="color:#fff;font-weight:bold">of</span> { <span style="color:#fff;font-weight:bold">GT</span> -&gt; <span style="color:#fff;font-weight:bold">True</span>;  <span style="color:#fff;font-weight:bold">_</span> -&gt; <span style="color:#fff;font-weight:bold">False</span> }
+    x &gt;= y = <span style="color:#fff;font-weight:bold">case</span> compare x y <span style="color:#fff;font-weight:bold">of</span> { <span style="color:#fff;font-weight:bold">LT</span> -&gt; <span style="color:#fff;font-weight:bold">False</span>; <span style="color:#fff;font-weight:bold">_</span> -&gt; <span style="color:#fff;font-weight:bold">True</span> }
+
+        <span style="color:#007f7f">-- These two default methods use &#39;&lt;=&#39; rather than &#39;compare&#39;</span>
+        <span style="color:#007f7f">-- because the latter is often more expensive</span>
+    max x y = <span style="color:#fff;font-weight:bold">if</span> x &lt;= y <span style="color:#fff;font-weight:bold">then</span> y <span style="color:#fff;font-weight:bold">else</span> x
+    min x y = <span style="color:#fff;font-weight:bold">if</span> x &lt;= y <span style="color:#fff;font-weight:bold">then</span> x <span style="color:#fff;font-weight:bold">else</span> y
+    <span style="color:#007f7f">{-# MINIMAL compare | (&lt;=) #-}</span>
+
+<span style="color:#fff;font-weight:bold">deriving</span> <span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Ord</span> <span style="color:#fff;font-weight:bold">()</span>
+<span style="color:#fff;font-weight:bold">deriving</span> <span style="color:#fff;font-weight:bold">instance</span> (<span style="color:#fff;font-weight:bold">Ord</span> a, <span style="color:#fff;font-weight:bold">Ord</span> b) =&gt; <span style="color:#fff;font-weight:bold">Ord</span> (a, b)
+<span style="color:#007f7f">-- 后续省略</span>
+</code></pre></div><p>注意到类型 a 必须首先满足 Eq 的约束，即必须拥有 (==) 和 (/=) 才能有 Ord。换言之，如果一个类型满足 Ord，那它必然也满足 Eq。这有点类似面向对象中类的继承。</p>
+<h2 id="functor">Functor</h2>
+<p>讲了几个平凡的例子，接下来让我们讲些真正有趣的东西吧。</p>
+<p>首先我们得理解，什么是范畴，一个范畴可以理解为一种对环的概念的扩展。范畴是由对象Object （以下简记 Obj）和对象间的映射 Morphism （以下简记Mor）构成的二元组。</p>
+<p>Functor 即是函子，一个从范畴 <em>$C$</em> 到范畴 <em>$D$</em> 的函子 <em>$F$</em> 的作用是将 $c \in Obj(C)$ 映射到 $F(c)\in Obj(D)$。同时将 $f:x\to y \in Mor(C)$ 映射到 $F(f):F(x)\to F(y)\in Mor(D)$ 并保证：
+$$
+F(g∘f) = F(g)∘F(f)\<br>
+F(1_x) = 1_{F(x)}
+$$
+数学上的定义很好理解，当然实际上的程序定义同样如此：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Haskell" data-lang="Haskell"><span style="color:#007f7f">-- GHC.Base</span>
+<span style="color:#fff;font-weight:bold">class</span>  <span style="color:#fff;font-weight:bold">Functor</span> f  <span style="color:#fff;font-weight:bold">where</span>
+    <span style="color:#007f7f">-- | Using @ApplicativeDo@: \&#39;@&#39;fmap&#39; f as@\&#39; can be understood as</span>
+    <span style="color:#007f7f">-- the @do@ expression</span>
+    <span style="color:#007f7f">--</span>
+    <span style="color:#007f7f">-- @</span>
+    <span style="color:#007f7f">-- do a &lt;- as</span>
+    <span style="color:#007f7f">--    pure (f a)</span>
+    <span style="color:#007f7f">-- @</span>
+    <span style="color:#007f7f">--</span>
+    <span style="color:#007f7f">-- with an inferred @Functor@ constraint.</span>
+    fmap        :: (a -&gt; b) -&gt; f a -&gt; f b
+    <span style="color:#007f7f">-- | Replace all locations in the input with the same value.</span>
+    <span style="color:#007f7f">-- The default definition is @&#39;fmap&#39; . &#39;const&#39;@, but this may be</span>
+    <span style="color:#007f7f">-- overridden with a more efficient version.</span>
+    <span style="color:#007f7f">--</span>
+    <span style="color:#007f7f">-- Using @ApplicativeDo@: \&#39;@a &#39;&lt;$&#39; bs@\&#39; can be understood as the</span>
+    <span style="color:#007f7f">-- @do@ expression</span>
+    <span style="color:#007f7f">--</span>
+    <span style="color:#007f7f">-- @</span>
+    <span style="color:#007f7f">-- do bs</span>
+    <span style="color:#007f7f">--    pure a</span>
+    <span style="color:#007f7f">-- @</span>
+    <span style="color:#007f7f">--</span>
+    <span style="color:#007f7f">-- with an inferred @Functor@ constraint.</span>
+    (&lt;$)        :: a -&gt; f b -&gt; f a
+    (&lt;$)        =  fmap . const
+</code></pre></div><p>抛开 do 的语法糖，我们注意到一个 Functor f 只需要定义一个函数，即 <code>fmap</code> 对应上述数学式中函子 $F$ 对 morphism 的映射。</p>
+<p><code>(&lt;$)</code> 实际上已经给出，通过类型我们也可以明白它的功能。什么，你说你不明白，那换成非 point-free的形式：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- fmap :: (a -&gt; b) -&gt; f a -&gt; f b</span>
+<span style="color:#007f7f">-- const :: b -&gt; (a -&gt; b)</span>
+(&lt;$) :: b -&gt; f a -&gt; f b
+(&lt;$) b fa = fmap (const b) fa
+</code></pre></div><p>很显然，这个函数负责由 $b\in Obj(C)$ 和 $F(a)\in Obj(D)$ 确定 $F(b) \in Obj(D)$。实际使用中相当于某种替换。</p>
+<p>我们可以注意到 f a 似乎是某种新的类型，如果 a 类比某个值，那么 f a 明显是一个函数。而我们并不知道 f a 到底是什么值，只知道它是某个值。</p>
+<p>实际上 f 是 Inductive Type，我们不需要深入理解， 知道它的数学对应——functor，就足够了。</p>
+<h2 id="applicative">Applicative</h2>
+<p>applicative functor 是一个在编程中非常有用的函子，让我们看看源码：</p>
+<blockquote>
+<p>有删减</p>
+</blockquote>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- GHC.Base</span>
+<span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">Functor</span> f =&gt; <span style="color:#fff;font-weight:bold">Applicative</span> f <span style="color:#fff;font-weight:bold">where</span>
+    <span style="color:#007f7f">{-# MINIMAL pure, ((&lt;*&gt;) | liftA2) #-}</span>
+    <span style="color:#007f7f">-- | Lift a value.</span>
+    pure :: a -&gt; f a
+
+    <span style="color:#007f7f">-- | Sequential application.</span>
+    (&lt;*&gt;) :: f (a -&gt; b) -&gt; f a -&gt; f b
+    (&lt;*&gt;) = liftA2 id
+
+    <span style="color:#007f7f">-- | Lift a binary function to actions.</span>
+    liftA2 :: (a -&gt; b -&gt; c) -&gt; f a -&gt; f b -&gt; f c
+    liftA2 f x = (&lt;*&gt;) (fmap f x)
+
+    <span style="color:#007f7f">-- | Sequence actions, discarding the value of the first argument.</span>
+    (*&gt;) :: f a -&gt; f b -&gt; f b
+    a1 *&gt; a2 = (id &lt;$ a1) &lt;*&gt; a2
+    
+    (&lt;*) :: f a -&gt; f b -&gt; f a
+    (&lt;*) = liftA2 const
+
+
+(&lt;**&gt;) :: <span style="color:#fff;font-weight:bold">Applicative</span> f =&gt; f a -&gt; f (a -&gt; b) -&gt; f b
+(&lt;**&gt;) = liftA2 (\a f -&gt; f a)
+
+<span style="color:#007f7f">-- with an inferred @Functor@ constraint, weaker than @Applicative@.</span>
+liftA :: <span style="color:#fff;font-weight:bold">Applicative</span> f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+liftA f a = pure f &lt;*&gt; a
+<span style="color:#007f7f">-- Caution: since this may be used for `fmap`, we can&#39;t use the obvious</span>
+<span style="color:#007f7f">-- definition of liftA = fmap.</span>
+liftA3 :: <span style="color:#fff;font-weight:bold">Applicative</span> f =&gt; (a -&gt; b -&gt; c -&gt; d) -&gt; f a -&gt; f b -&gt; f c -&gt; f d
+liftA3 f a b c = liftA2 f a b &lt;*&gt; c
+</code></pre></div><p>我们不考虑do notation 和更详细的 progma，所以只摘录了部分必要的内容。</p>
+<p>我们不需要被这一长串吓到，实际上我们只需要定义 Applicative functor 中的两个函数，pure 和 &lt;*&gt; | liftA2 之一。</p>
+<p>虽然从数学的角度，不在 Funtor 而在 Applicative 定义有点怪怪的，不过既然这是 programming，那就不要谈那么多数学。</p>
+<p>类型其实已经帮助我们说明了大部分问题。</p>
+<p><code>pure</code> 无非是定义一个从 a lift到 f a 的方法，或者说 $c \in Obj(C)$ 映射到 $F(c)\in Obj(D)$。
+<code>&lt;*&gt;</code> 是 sequential application，更数学的看法是其实它对应着 $f:x\to y \in Mor(C)$ 到 $F(f):F(x)\to F(y)\in Mor(D)$ 的映射。
+<code>liftA2</code> 是一个二元函数，是 <code>&lt;*&gt;</code> 的二维形式。·</p>
+<p>显然 <code>liftA2 </code> 和 <code>&lt;*&gt;</code> 可以互相转换</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(&lt;*&gt;) :: f (b -&gt; c) -&gt; f b -&gt; f c
+(&lt;*&gt;) = liftA2 id 
+<span style="color:#007f7f">-- 令 a = b -&gt; c 显然有 id = ((b-&gt;c) -&gt; (b-&gt;c)) , f a = f (b -&gt; c)</span>
+
+liftA2 :: (a -&gt; b -&gt; c) -&gt; f a -&gt; f b -&gt; f c
+liftA2 f x = (&lt;*&gt;) (fmap f x)
+<span style="color:#007f7f">-- f :: (a -&gt; b -&gt; c), x :: f a</span>
+<span style="color:#007f7f">-- fmap :: (a -&gt; b -&gt; c) -&gt; f a -&gt; f (b -&gt; c) </span>
+<span style="color:#007f7f">-- 相当于先处理第一个参数，再对后面的参数进行sequential application</span>
+</code></pre></div><p><code>*&gt;</code> 的定义看起来晕晕的，但经过代换你会发现实际上：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(*&gt;) = liftA2 (flip const)
+(*&gt;) = flip (&lt;*)
+</code></pre></div><p>而 <code>&lt;*</code> 和 functor 中的定义是一回事。之所以写这么绕是优化上的事，所以暂且不管它。
+<code>liftA</code> 和 <code>fmap</code> 和 <code>&lt;*&gt;</code> 都是一回事。为什么要拆成那么多，一部分是历史包袱，一部分我也不知道，不过能用 <code>fmap</code> 就少用 <code>&lt;*&gt;</code>。
+<code>liftA3</code> 是三元函数，不想多赘述了，具体分析思路见上。</p>
+<h2 id="monad">Monad</h2>
+<p>数学部分我都讲烂了，不会还有人不懂吧。</p>
+<p>直接讲源码。</p>
+<blockquote>
+<p>有删改</p>
+</blockquote>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">class</span> <span style="color:#fff;font-weight:bold">Applicative</span> m =&gt; <span style="color:#fff;font-weight:bold">Monad</span> m <span style="color:#fff;font-weight:bold">where</span>
+    <span style="color:#007f7f">-- | Sequentially compose two actions, passing any value produced</span>
+    (&gt;&gt;=)       :: forall a b. m a -&gt; (a -&gt; m b) -&gt; m b
+
+    <span style="color:#007f7f">-- | Sequentially compose two actions, discarding any value produced</span>
+    <span style="color:#007f7f">-- by the first, like sequencing operators (such as the semicolon)</span>
+    <span style="color:#007f7f">-- in imperative languages.</span>
+    (&gt;&gt;)        :: forall a b. m a -&gt; m b -&gt; m b
+    m &gt;&gt; k = m &gt;&gt;= \<span style="color:#fff;font-weight:bold">_</span> -&gt; k 
+    <span style="color:#007f7f">{-# INLINE (&gt;&gt;) #-}</span>
+
+    <span style="color:#007f7f">-- | Inject a value into the monadic type.</span>
+    return      :: a -&gt; m a
+    return      = pure
+
+<span style="color:#007f7f">-- | Same as &#39;&gt;&gt;=&#39;, but with the arguments interchanged.</span>
+<span style="color:#007f7f">{-# SPECIALISE (=&lt;&lt;) :: (a -&gt; [b]) -&gt; [a] -&gt; [b] #-}</span>
+(=&lt;&lt;)           :: <span style="color:#fff;font-weight:bold">Monad</span> m =&gt; (a -&gt; m b) -&gt; m a -&gt; m b
+f =&lt;&lt; x         = x &gt;&gt;= f
+
+<span style="color:#007f7f">-- | Conditional execution of &#39;Applicative&#39; expressions. For example,</span>
+when      :: (<span style="color:#fff;font-weight:bold">Applicative</span> f) =&gt; <span style="color:#fff;font-weight:bold">Bool</span> -&gt; f <span style="color:#fff;font-weight:bold">()</span> -&gt; f <span style="color:#fff;font-weight:bold">()</span>
+<span style="color:#007f7f">{-# INLINABLE when #-}</span>
+<span style="color:#007f7f">{-# SPECIALISE when :: Bool -&gt; IO () -&gt; IO () #-}</span>
+<span style="color:#007f7f">{-# SPECIALISE when :: Bool -&gt; Maybe () -&gt; Maybe () #-}</span>
+when p s  = <span style="color:#fff;font-weight:bold">if</span> p <span style="color:#fff;font-weight:bold">then</span> s <span style="color:#fff;font-weight:bold">else</span> pure <span style="color:#fff;font-weight:bold">()</span>
+
+<span style="color:#007f7f">-- | Evaluate each action in the sequence from left to right,</span>
+<span style="color:#007f7f">-- and collect the results.</span>
+sequence :: <span style="color:#fff;font-weight:bold">Monad</span> m =&gt; [m a] -&gt; m [a]
+<span style="color:#007f7f">{-# INLINE sequence #-}</span>
+sequence = mapM id
+<span style="color:#007f7f">-- Note: [sequence and mapM]</span>
+
+<span style="color:#007f7f">-- | @&#39;mapM&#39; f@ is equivalent to @&#39;sequence&#39; . &#39;map&#39; f@.</span>
+mapM :: <span style="color:#fff;font-weight:bold">Monad</span> m =&gt; (a -&gt; m b) -&gt; [a] -&gt; m [b]
+<span style="color:#007f7f">{-# INLINE mapM #-}</span>
+mapM f as = foldr k (return <span style="color:#fff;font-weight:bold">[]</span>) as
+            <span style="color:#fff;font-weight:bold">where</span>
+              k a r = <span style="color:#fff;font-weight:bold">do</span> { x &lt;- f a; xs &lt;- r; return (x<span style="color:#fff;font-weight:bold">:</span>xs) }
+
+<span style="color:#007f7f">-- | Promote a function to a monad.</span>
+liftM   :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; (a1 -&gt; r) -&gt; m a1 -&gt; m r
+liftM f m1              = <span style="color:#fff;font-weight:bold">do</span> { x1 &lt;- m1; return (f x1) }
+
+liftM2  :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; (a1 -&gt; a2 -&gt; r) -&gt; m a1 -&gt; m a2 -&gt; m r
+liftM2 f m1 m2          = <span style="color:#fff;font-weight:bold">do</span> { x1 &lt;- m1; x2 &lt;- m2; return (f x1 x2) }
+
+liftM3  :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; (a1 -&gt; a2 -&gt; a3 -&gt; r) -&gt; m a1 -&gt; m a2 -&gt; m a3 -&gt; m r
+liftM3 f m1 m2 m3       = <span style="color:#fff;font-weight:bold">do</span> { x1 &lt;- m1; x2 &lt;- m2; x3 &lt;- m3; return (f x1 x2 x3) }
+<span style="color:#007f7f">-- 省略</span>
+
+ap                :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; m (a -&gt; b) -&gt; m a -&gt; m b
+ap m1 m2          = <span style="color:#fff;font-weight:bold">do</span> { x1 &lt;- m1; x2 &lt;- m2; return (x1 x2) }
+
+join              :: (<span style="color:#fff;font-weight:bold">Monad</span> m) =&gt; m (m a) -&gt; m a
+join x            =  x &gt;&gt;= id
+</code></pre></div><p><code>&gt;&gt;=</code> 就是从左到右 $T\times T\to T$ 的combine，类型看起来有点怪哈，那我来解释一下：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(&gt;=&gt;) :: (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; (a -&gt; m c)
+(\x -&gt; f x) &gt;=&gt; (\y -&gt; g y) = (\x -&gt; h x)
+(&gt;&gt;=) :: m b -&gt; (b -&gt; m c) -&gt; m c
+(\x -&gt; f x &gt;&gt;= (\y -&gt; g y)) = (\x -&gt; h x)
+</code></pre></div><p>这样能少写 lambda 表达式，程序员都是懒狗。
+<code>(=&lt;&lt;)</code> 就是反过来。
+<code>mapM</code> 的作用无非是 monadic 的 <code>map</code> (a -&gt; b) -&gt; [a] -&gt; [b]
+<code>join</code> 的作用是为了把 $T (Tx)$ 变为 $Tx$，做法是直接返回内部的量。举个例子。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">join [[<span style="color:#ff0;font-weight:bold">1</span>,<span style="color:#ff0;font-weight:bold">2</span>,<span style="color:#ff0;font-weight:bold">3</span>],[<span style="color:#ff0;font-weight:bold">4</span>,<span style="color:#ff0;font-weight:bold">5</span>,<span style="color:#ff0;font-weight:bold">6</span>]] <span style="color:#007f7f">-- [1,2,3,4,5,6]</span>
+join (<span style="color:#fff;font-weight:bold">Just</span> <span style="color:#fff;font-weight:bold">Nothing</span>) <span style="color:#007f7f">-- Nothing</span>
+</code></pre></div><p><code>ap</code> 就是 <code>&lt;*&gt;</code>。
+<code>liftM_</code> 就是 <code>liftA_</code> 的 monad 对应。</p>
+<h2 id="应用">应用</h2>
+<p>让我们看一个实际的例子：</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Functor</span> ((-&gt;) r) <span style="color:#fff;font-weight:bold">where</span>
+	fmap = (.)
+	
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Applicative</span> ((-&gt;) r) <span style="color:#fff;font-weight:bold">where</span>
+  pure = const
+  (&lt;*&gt;) f g x = f x (g x) <span style="color:#007f7f">-- 如果你还对 SKI 组合子有印象的话 ；）</span>
+  liftA2 q f g x = q (f x) (g x) 
+  
+<span style="color:#fff;font-weight:bold">instance</span> <span style="color:#fff;font-weight:bold">Monad</span> ((-&gt;) r) <span style="color:#fff;font-weight:bold">where</span>
+  f &gt;&gt;= k = \r -&gt; k (f r) r
+</code></pre></div><p>还记得我在 SKI 组合子里说过的东西吗，为什么 S 可以用 &lt;*&gt; 替代。实际上在箭头范畴中出现了满满的即视感有木有？</p>
+<p>好啦，让我们理解一下，什么是箭头范畴呢。</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#007f7f">-- fmap :: (a -&gt; b) -&gt; m a -&gt; m b</span>
+fmap x y = (.) x y
+<span style="color:#007f7f">-- x :: (a -&gt; b), y :: (r -&gt; a)</span>
+<span style="color:#007f7f">-- fmap :: (a -&gt; b) -&gt; (r -&gt; a) -&gt; (r -&gt; b)</span>
+<span style="color:#007f7f">-- fmap :: (a -&gt; b) -&gt; ((-&gt;) r) a -&gt; ((-&gt;) r) b</span>
+
+<span style="color:#007f7f">-- pure :: a -&gt; m a</span>
+pure k = const k = (\r -&gt; k)
+<span style="color:#007f7f">-- k :: a, pure :: a -&gt; r -&gt; a</span>
+<span style="color:#007f7f">-- pure :: a -&gt; ((-&gt;) r) a</span>
+
+<span style="color:#007f7f">-- (&lt;*&gt;) :: f (a -&gt; b) -&gt; f a -&gt; f b</span>
+(&lt;*&gt;) f g x = f x (g x)
+<span style="color:#007f7f">-- x :: r, g :: r -&gt; a, f :: r -&gt; a -&gt; b</span>
+<span style="color:#007f7f">-- (&lt;*&gt;) :: (r -&gt; a -&gt; b) -&gt; (r -&gt; a) -&gt; r -&gt; b</span>
+<span style="color:#007f7f">-- (&lt;*&gt;) :: ((-&gt;) r) (a -&gt; b) -&gt; ((-&gt;) r) a -&gt; ((-&gt;) r) b</span>
+
+<span style="color:#007f7f">-- (&gt;&gt;=) :: m a -&gt; (a -&gt; m b) -&gt; m b</span>
+f &gt;&gt;= k = \r -&gt; k (f r) r
+<span style="color:#007f7f">-- f :: r -&gt; a, k :: a -&gt; r -&gt; b</span>
+<span style="color:#007f7f">-- (&gt;&gt;=) :: r -&gt; a -&gt; a -&gt; r -&gt; b -&gt; r -&gt; b</span>
+<span style="color:#007f7f">-- (&gt;&gt;=) :: ((-&gt;) r) a -&gt; (a -&gt; ((-&gt;) r) b) -&gt; ((-&gt;) r) b</span>
+</code></pre></div><p>有没有发现就是我们之前谈论的 SK 组合子，原来它也是monadic 的呀。</p>
+<p>是不是很神奇，是不是很好玩。www</p>
+<p>所以快来一起学 Haskell 吧。</p>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+      <h3>See also in Haskell</h3>
+      <nav>
+        <ul>
+        
+        
+          
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/ski-%E7%BB%84%E5%90%88%E5%AD%90/">SKI 组合子</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/">Typed Tagless Final Interpreters</a>
+            </li>
+          
+        
+        </ul>
+      </nav>
+    
+  
+    
+    
+    
+      <h3>See also in programming</h3>
+      <nav>
+        <ul>
+        
+        
+          
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/">Typed Tagless Final Interpreters</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.chronicat.xyz/cn/posts/ntt/">五分钟学会快速数论变换</a>
+            </li>
+          
+        
+        </ul>
+      </nav>
+    
+  
+</section>
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "chronicat-xyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body,
+      {
+        delimiters: [
+          {left: '$$', right: '$$', display:true},
+          {left: '$', right: '$', display:false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ]
+      }
+    );"></script>
+  </section>
+
+      </div>
+
+      
+  <footer class="footer">
+    <section class="container">
+      
+        <p>海洋和沙岸却将永远存在。</p>
+      
+      
+        ©
+        
+        2021
+         ChroniCat 
+      
+      
+         · 
+        Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+      
+      
+    </section>
+  </footer>
+
+
+    </main>
+
+    
+      
+        
+        <script src="https://blog.chronicat.xyz/js/dark-mode.min.0213e1773e6d1c5a644f847c67a6f8abac49a3776e2976f6008038af8c5b76a1.js"></script>
+      
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

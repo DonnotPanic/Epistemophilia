@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>programming on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/cn/series/programming/</link>
+    <description>Recent content in programming on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 12 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/cn/series/programming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Haskell中的几个基础的Typeclass</title>
+      <link>https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/</link>
+      <pubDate>Fri, 12 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/posts/haskell%E4%B8%AD%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84typeclass/</guid>
+      <description>讲一些简单的东西，安利更多人打破内心的恐惧入坑 Haskell &amp;gt; w &amp;lt;
+首先什么是Typeclass呢，其实没必要讲的那么玄乎，那么抽象，Typeclass 无非是 type 级别的约束，所有的 Typeclass 里的 type 必须实现 Typeclass 中函数并保证满足这些函数应有的性质，可以打个比方，就是数学中所说的满足 xx 性质。但是具体来说是不是真的满足这些性质呢，实际上是我们，programmer 应该考虑的问题。有了 Typeclass 的约束，就满足了对应的性质，因而我们就可以自由的按照我们的想法去进行操作了。
+Haskell 中用 class 关键词定义 Typeclass， 而与之相对的，满足 Typeclass 约束的某个具体的类型，用 instance 关键词去实现 Typeclass中定义的函数。
+ 注：以下不会区分函数和 operator， 统一用函数表示。
+ 举一个简单的例子：
+Eq Eq Typeclass 描述了该类型上存在等价关系（自反，对称，传递） =， 同时满足Substitutivity 和 Negation：
+-- Reflexivity (x == x) = True -- Symmetry (x == y) = (y == x) -- Transitivity if ((x == y) &amp;amp;&amp;amp; (y == z)) = True, then (x == z) = True -- Substitutivity -- f 返回一个 Eq typeclass 约束的 instance if (x == y) = True then (f x == f y) = True -- Negation x /= y = not (x == y) Eq 的具体定义在 GHC.</description>
+    </item>
+    
+    <item>
+      <title>Typed Tagless Final Interpreters</title>
+      <link>https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/</link>
+      <pubDate>Mon, 04 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/posts/typed-tagless-final-interpreters/</guid>
+      <description>来了，那么这一次，我们来整Typed Tagless Final Interpreters
+懂英语的筒子可以直接看这里：Typed Tagless-Final Interpretation: Introductory Course
+实现约定，文中所有data type用大写字母开头，普通函数用小写字母。
+ 首先解释一下题目，明眼人都看得出，这个标题由4个单词组成 [Typed , Tagless , Final , Interpreters] ，说明什么呢？说明我们这个blog就讲这四块，咱们先得从Interpreters 讲起。
+说到这个Interpreter，看过编译原理的小伙伴们开始高兴了，诶呀这题我会，这不就是写parser嘛，我老parser机器人了，手写AST(Abstract Syntax Tree)不在话下。好，到这一步的小伙伴都可以竖起耳朵狸，本文的受众就是你萌w。
+为什么说 Parser 不一定依赖 AST 呢，当然，AST 确实是一种看法，具体的来说把 data type 看作 AST 然后通过 interpreter 去 recessively deconstruct，这是一种从顶向下的看法，或者说，initial 的看法。与之相对的有一种叫 final 的看法，试图从底向上，从 eliminator (从没听过这个词？没关系，它就是 constructor 的对偶概念，看到后面就懂了) 的组合的角度设计 Interpreter。
+当然首先，我们得从 Initial Interpreter 讲起。
+Interpreter in the Initial Approach 之前说大家都写 AST 当然是调侃，其实大家不一定需要会写，本文所需求的计算机基础是很低的，与之相对的是不会讲得很深:-) 。不过最好懂一点 Haskell ，不用多，掌握 pattern match 和列表操作就够了。这里给两个推荐 real world haskell 以及 Write Yourself a Scheme in 48 Hours ，如果想进一步了解这个语言的话建议阅读。</description>
+    </item>
+    
+    <item>
+      <title>五分钟学会快速数论变换</title>
+      <link>https://blog.chronicat.xyz/cn/posts/ntt/</link>
+      <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/posts/ntt/</guid>
+      <description>注，本文章是18年的旧文，是我刚学C++时所写。
+ 前置: 快速幂取模 快速计算$\ a^b (mod\ m)$ 原理: 取模运算的结合率 $x*y(mod\ m)\ =\ x(mod\ m)*y(mod\ m )$
+快速算法: b为偶数时，可将$a^b$拆分成$a^\frac{b}2*a^\frac{b}2$分别取模，将复杂度降低为$O(\log_{2}N) $
+代码(C++):
+int quick_mod (int a, int b, int m) { int ans = 1; a %= m; while (b) { if (b &amp;amp; 1) { ans = ans * a % m; b--; } b &amp;gt;&amp;gt;= 1; a = a * a % m; } return ans; } 正题 我们都知道朴素卷积算法：</description>
+    </item>
+    
+  </channel>
+</rss>

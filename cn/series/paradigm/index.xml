@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>paradigm on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/cn/series/paradigm/</link>
+    <description>Recent content in paradigm on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 07 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/cn/series/paradigm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SKI 组合子</title>
+      <link>https://blog.chronicat.xyz/cn/posts/ski-%E7%BB%84%E5%90%88%E5%AD%90/</link>
+      <pubDate>Sun, 07 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/posts/ski-%E7%BB%84%E5%90%88%E5%AD%90/</guid>
+      <description>关于 SKI组合子 的历史以及发明的动机我就不谈了。而且让我来说我也说不好。这里只是简单介绍一下什么是 SKI组合子 以及利用 SKI 实现 Point-free Style 的转换。
+什么是 SKI 组合子 写的简单一点，SKI组合子 是某种高阶函数，定义为：
+i :: a -&amp;gt; a i x = x k :: a -&amp;gt; b -&amp;gt; a k x y = x s :: (a -&amp;gt; b -&amp;gt; c) -&amp;gt; (a -&amp;gt; b) -&amp;gt; a -&amp;gt; c s x y z = x z (y z) 注意到其实这就对应：
+i = id k = const s = ap -- s = (&amp;lt;*&amp;gt;)  实际上这里（Applicative m) =&amp;gt; m 可以看作 a -&amp;gt; *，这样 s :: (a -&amp;gt; b -&amp;gt; c) -&amp;gt; (a -&amp;gt; b) -&amp;gt; a -&amp;gt; c 等价于(&amp;lt;*&amp;gt;) :: m (b -&amp;gt; c) -&amp;gt; m b -&amp;gt; m c</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Series on Epistemophilia</title>
+    <link>https://blog.chronicat.xyz/cn/series/</link>
+    <description>Recent content in Series on Epistemophilia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 12 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.chronicat.xyz/cn/series/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Haskell</title>
+      <link>https://blog.chronicat.xyz/cn/series/haskell/</link>
+      <pubDate>Fri, 12 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/series/haskell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://blog.chronicat.xyz/cn/series/programming/</link>
+      <pubDate>Fri, 12 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/series/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>paradigm</title>
+      <link>https://blog.chronicat.xyz/cn/series/paradigm/</link>
+      <pubDate>Sun, 07 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/series/paradigm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>algorithm</title>
+      <link>https://blog.chronicat.xyz/cn/series/algorithm/</link>
+      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/series/algorithm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://blog.chronicat.xyz/cn/series/c&#43;&#43;/</link>
+      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/series/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>combinatorics</title>
+      <link>https://blog.chronicat.xyz/cn/series/combinatorics/</link>
+      <pubDate>Sun, 23 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.chronicat.xyz/cn/series/combinatorics/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
