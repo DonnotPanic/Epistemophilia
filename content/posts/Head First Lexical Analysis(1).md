@@ -2,7 +2,7 @@
 date = "2021-01-19"
 title =  "Head First Lexical Analysis(1)"
 katex = true
-series = ["lexer","programming"]
+series = ["lexer"]
 +++
 
 In general, lexical analysis is the process that transform the input source program to token stream, which later will be used by parser to produce syntax tree.
@@ -193,8 +193,8 @@ The main concept of Berry-Sethi is to use ($\cdot$) as separator so as to divide
 
 {{< rawhtml >}}
 
-<div style="flex: 0 1 auto; "><center><img src="/lexical_analysis/lexical_analysis_1.svg" style="zoom: 80%;"  />
-  <img src="/lexical_analysis/lexical_analysis_2.svg" style="zoom: 80%;"  /></center></div>
+<div style="flex: 0 1 auto; "><center><img src="/lexical_analysis/lexical_analysis_1.svg" style="zoom: 67%;"  />
+  <img src="/lexical_analysis/lexical_analysis_2.svg" style="zoom: 67%;"  /></center></div>
 
 {{< /rawhtml >}}
 
@@ -208,7 +208,6 @@ First, it's important like to know whether a subprocess is negelectable, if some
 -​ Empty\[r1\*\] = true
 - ​Empty\[r1|r2\] = Empty\[r1\] or Empty\[r2\]
 - Empty\[r1$\cdot$r2\] = Empty\[r1\] and Empty\[r2\]
-- Empty\[r1$\cdot$ r2\] = Empty\[r1\] and Empty\[r2\]
 
 > Since the $\epsilon$ will be eliminated at last, we should define (?) too.
 
