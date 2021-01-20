@@ -25,8 +25,10 @@ As a head first style tutorial, we may assume the readers have little or no know
 
 You might have seen this picture before:
 
+{{< rawhtml >}}
 <center><img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Chomsky-hierarchy.svg" alt="Chomsky Hierarchy" style="zoom:50%;" /><br/>
 <b>Fig 1: Chomsky Hierarchy</b></center>
+{{< /rawhtml >}}
 
 It is called the **Chomsky Hierachy**, a containment hierarchy of formal grammars.
 
@@ -145,11 +147,11 @@ Example:
 
 Suppose there is a RE: `l(mao|ol)`.
 
-First, construct a NFA with epsilon:
+First, construct a NFA with $\epsilon$:
 
 {{< rawhtml >}}
 <center>
-<img src="/images/截屏2021-01-15 下午8.35.47.png" alt="截屏2021-01-15 下午8.35.47" style="zoom:50%;" />
+<img src="/lexical_analysis/lexical_analysis_3.png" style="zoom:50%;" />
 </center>
 {{< /rawhtml >}}
 
@@ -173,7 +175,7 @@ So the final NFA looks like this:
 
 {{< rawhtml >}}
 <center>
-<img src="/images/截屏2021-01-15 下午8.58.13.png" alt="截屏2021-01-15 下午8.58.13" style="zoom: 50%;" />
+<img src="/lexical_analysis/lexical_analysis_4.png" style="zoom: 50%;" />
 </center>
 {{< /rawhtml >}}
 
@@ -191,8 +193,8 @@ The main concept of Berry-Sethi is to use ($\cdot$) as separator so as to divide
 
 {{< rawhtml >}}
 
-<div style="flex: 0 1 auto; "><center><img src="/images/graphviz-4.svg" alt="graphviz-2" style="zoom: 80%;"  />
-  <img src="/images/graphviz-3.svg" alt="graphviz-3" style="zoom: 80%;"  /></center></div>
+<div style="flex: 0 1 auto; "><center><img src="/lexical_analysis/lexical_analysis_1.svg" style="zoom: 80%;"  />
+  <img src="/lexical_analysis/lexical_analysis_2.svg" style="zoom: 80%;"  /></center></div>
 
 {{< /rawhtml >}}
 
@@ -253,7 +255,7 @@ In this case, the transitions are (1, b, 5), (1, a, 7), (5, a, 9), (5, b, 10), (
 
 {{< rawhtml >}}
 <center>
-<img src="/images/截屏2021-01-19 下午11.03.22.png" alt="截屏2021-01-19 下午11.03.22" style="zoom: 50%;" />
+<img src="/lexical_analysis/lexical_analysis_5.png" style="zoom: 50%;" />
 </center>
 {{< /rawhtml >}}
 
@@ -261,7 +263,7 @@ And finally, we will use this methods to convert `l(mao|ol)` and show the differ
 
 {{< rawhtml >}}
 <center>
-<img src="/images/截屏2021-01-19 下午11.15.16.png" alt="截屏2021-01-19 下午11.15.16" style="zoom:50%;" />
+<img src="/lexical_analysis/lexical_analysis_6.png" style="zoom:50%;" />
 </center>
 {{< /rawhtml >}}
 
