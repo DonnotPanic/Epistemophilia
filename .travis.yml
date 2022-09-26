@@ -22,7 +22,7 @@ deploy:
         branch: hugo
     local_dir: public
     repo: DonnotPanic/Epistemophilia
-    fqdn: blog.chronicat.xyz
+    fqdn: donnotpanic.github.io/Epistemophilia/
     target_branch: gh-pages
     email: murundong@163.com
     name: DonnotPanic
