@@ -29,8 +29,8 @@ series = ["Haskell","programming"]
 ```haskell
 -- 一个简单的加减法运算表达式类型
 data Exp = Lit Int
-				 | Neg Exp
-				 | Add Exp Exp
+         | Neg Exp
+         | Add Exp Exp
 ```
 
 > 如果你不知道 ADT 是什么也没关系，你可以想象一下BNF。
@@ -125,7 +125,9 @@ tf1_view = view tf1 -- "(8 + (-(1 + 2)))"
 
 为什么需要 Final Approach 的，原因很简单。
 
-考虑从 Intial Approach 得到的 Exp，我们现在要对它进行扩展，加上乘法运算，怎么办呢，方法一，修改原有的声明：
+考虑从 Intial Approach 得到的 Exp，我们现在要对它进行扩展，加上乘法运算，怎么办呢？
+
+**方法一，修改原有的声明：**
 
 ```haskell
 data Exp = Lit Int
@@ -135,7 +137,7 @@ data Exp = Lit Int
 
 但这么做是很危险的，如果你开发一个新功能，尚不清楚能否实现，但直接修改经过测试的正确封装的老代码，显然是行不通的。更不必提修改原有代码本身就是开销很大的事情。
 
-方法二，提升：
+**方法二，提升：**
 
 ```haskell
 data MulExp = EOld Exp
