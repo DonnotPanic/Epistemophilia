@@ -217,7 +217,7 @@ First, it's important like to know whether a subprocess is negelectable, if some
 
 For this case, the Empty set is {false, true, false, false, false, false, false, false, false, false}
 
-Next, we concern about the sets of possible leafs it may touch first after we go downstair to this node. And we need to know its children to help us find it out. Thus, we may traverse the tree in postorder again. We define First\[\] for each node:
+Next, we concern about the sets of possible leaves it may touch first after we go downstair to this node. And we need to know its children to help us find it out. Thus, we may traverse the tree in postorder again. We define First\[\] for each node:
 - First\[$\epsilon$\] = $\empty$
 - First\[x\] = {x}
 - First\[r1*\] = First\[r1\]
@@ -236,19 +236,20 @@ Finally, the possible leafs it may reach after traversing current subtree. For t
 | ----------- | ------------------------------------------------------------ |
 | r1*         | Next\[r1\] = First\[r1\] $\cup$ Next\[r\]                          |
 | r1?         | Next\[r1\] = Next\[r\]                                           |
-| r1\|r2      | Next\[r1\] = Next\[r\]<br />Next\[r2\] = Next\[r\]                   |
-| r1$\cdot$r2 | Next\[r1\] = First\[r2\] $\cup$ Next\[r\] if Empty\[r2\] = true<br />         = First\[r2\]           if Empty\[r2\] = false<br />Next\[r2\] = Next\[r\] |
+| r1\|r2      | Next\[r1\] = Next\[r\], Next\[r2\] = Next\[r\]                   |
+| r1$\cdot$r2 | Next\[r1\] = if Empty\[r2\] = true then First\[r2\] $\cup$ Next\[r\]
+    otherwise First\[r2\] , Next\[r2\] = Next\[r\] |
 
 And the Next set of this case is {$\empty$, {5}, $\empty$, {5,7}, {9,10}, $\empty$, {8}, {5,7}, $\empty$, $\empty$}
 
 And let's combine these steps together. All the states we need include an entry point, which is the root, and all the leafs except $\epsilon$. The automaton consists of:
 
-> Last\[root\] conatains all the leafs that has an empty Next.
+> Last\[root\] contains all the leaves that could be the last to be visited in a traversal, which could be obtained in a similar way as Next does.
 
 - States: {root} $\cup$ {leafs}/{$\epsilon$}
 - Initial State: {root}
-- Final States: Last\[root\]           if empty\[root\] = false
-                {root} $\cup$ Last\[root\]  otherwise
+- Final States: if empty\[root\] = false then Last\[root\] otherwise      
+                {root} $\cup$ Last\[root\] 
 - Transition: For leaf nodes in First\[root\], reserve the transition between them. For other leaf nodes, reserve the transition between them and their neighbors obtained in Next.
 
 In this case, the transitions are (1, b, 5), (1, a, 7), (5, a, 9), (5, b, 10), (7, b, 8), (8, b, 5), (8, a, 7). The final states is {9, 10}.
