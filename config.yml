@@ -41,9 +41,9 @@ languages:
             - name: Search
               url: search/
               weight: 10
-            - name: Friend
+            - name: Friend Links
               url: friends/
-              weight: 20
+              weight: 50
 
   zh:
       languageName: "中文"
@@ -65,15 +65,15 @@ languages:
                   url: tags
       menu:
         main:
-            - name: Archive
+            - name: 历史
               url: archives
               weight: 5
-            - name: Search
+            - name: 搜索
               url: search/
               weight: 10
-            - name: Friend
-              url: friends
-              weight: 20
+            - name: 友情链接
+              url: friends/
+              weight: 50
 outputs:
   home:
       - HTML
