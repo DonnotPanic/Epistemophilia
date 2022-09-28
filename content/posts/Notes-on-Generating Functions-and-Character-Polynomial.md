@@ -1,9 +1,9 @@
-+++
-title = "Notes on Generating Functions and Character Polynomial"
-date = 2020-09-14
-katex = true
-series = ["combinatorics","math"]
-+++
+---
+title: "Notes on Generating Functions and Character Polynomial"
+date: 2020-09-14
+katex: true
+tags: ["combinatorics", "functional programming"]
+---
 
 # Notes on Generating Functions and Character Polynomial
 

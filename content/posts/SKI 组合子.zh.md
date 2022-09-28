@@ -1,9 +1,9 @@
-+++
-date = "2020-06-07"
-title = "SKI 组合子"
-katex = true
-series = ["Haskell","paradigm"]
-+++
+---
+date: 2020-06-07
+title: "SKI 组合子"
+katex: true
+tags: ["Haskell", "functional programming"]
+---
 
 关于 **SKI组合子** 的历史以及发明的动机我就不谈了。而且让我来说我也说不好。这里只是简单介绍一下什么是 **SKI组合子** 以及利用  **SKI** 实现 **Point-free Style** 的转换。
 

@@ -1,9 +1,9 @@
-+++
-date = "2018-10-11"
-title ="Warshall算法简述"
-katex = "true"
-series = ["algorithm","C++"]
-+++
+---
+date: 2018-10-11
+title: "Warshall算法简述"
+katex: true
+tags: ["algorithm", "C++"]
+---
 
 
 

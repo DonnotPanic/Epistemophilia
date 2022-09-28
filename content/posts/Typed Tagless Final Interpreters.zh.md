@@ -1,9 +1,9 @@
-+++
-date = "2020-05-04"
-title = "Typed Tagless Final Interpreters"
-katex = true
-series = ["Haskell","programming"]
-+++
+---
+date: 2020-05-04
+title: "Typed Tagless Final Interpreters"
+katex: true
+tags: ["Haskell", "functional programming"]
+---
 
 
 > 来了，那么这一次，我们来整Typed Tagless Final Interpreters

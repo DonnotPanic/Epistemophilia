@@ -1,9 +1,10 @@
-+++
-date = "2021-03-26"
-title = "Subtyping：从 Lens 到 Row Polymorphism"
-katex = true
-series = ["OCaml","Haskell", "Row Poly", "programming"]
-+++
+---
+date: 2021-03-26
+title: "Subtyping：从 Lens 到 Row Polymorphism"
+katex: true
+tags: ["OCaml", "Haskell", "functional programming"]
+draft: true
+---
 
 最近水群时看到群友在 Rust 里写 Lens ，突然想整理一篇水文谈谈相关的话题，虽然是从 Lens 到 Row Polymorphism ，本文并不会涉及 Lens 的技术细节，如果对 Lens 这一技术感兴趣，推荐 [Lens简介](https://zhuanlan.zhihu.com/p/337455794)或者 [Lens更长一点的简介](http://oleg.fi/gists/posts/2017-04-18-glassery.html) 。
 

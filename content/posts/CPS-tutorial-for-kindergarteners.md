@@ -1,9 +1,9 @@
-+++
-date = "2020-04-01"
-title = "CPS Tutorial For Kindergarteners"
-katex = "true"
-series = ["Haskell","paradigm","programming"]
-+++
+---
+date: 2020-04-01
+title: "CPS Tutorial For Kindergarteners"
+katex: true
+tags: ["Haskell", "functional programming"]
+---
 
 > "It was a detour that was our shortest path"  
 >
